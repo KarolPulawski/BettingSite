@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GameDto {
+    @JsonProperty("gameId")
+    private String gameId;
+
     @JsonProperty("teamHome")
     private String teamHome;
 
@@ -91,5 +94,13 @@ public class GameDto {
 
     public void setAwayOdd(double awayOdd) {
         this.awayOdd = awayOdd;
+    }
+
+    public String getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(String gameId) {
+        this.gameId = gameId;
     }
 }
