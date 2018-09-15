@@ -1,0 +1,33 @@
+<html xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorator="layout_main">
+
+<div layout:fragment="content">
+
+    <p th:text="GAMES"></p>
+
+    <table>
+        <thead>
+            <td>game id</td>
+            <td>home</td>
+            <td>result</td>
+            <td>result</td>
+            <td>away</td>
+            <td>yellow home</td>
+            <td>yellow red</td>
+
+
+        </thead>
+
+        <tr th:each="game: ${games}">
+            <td th:text="${game.gameId}"></td>
+            <td th:text="${game.teamHome}"></td>
+            <td th:text="${game.homeGoal}"></td>
+            <td th:text="${game.awayGoal}"></td>
+            <td th:text="${game.teamAway}"></td>
+            <td th:text="${game.homeYellow}"></td>
+            <td th:text="${game.awayYellow}"></td>
+
+        </tr>
+    </table>
+</div>
+</html>

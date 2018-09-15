@@ -52,8 +52,7 @@ public class HomeController {
     }
 
     @RequestMapping("/get-results")
-    @ResponseBody
-    public String getResults() throws ServletException, IOException {
+    public String getResults(Model model) throws ServletException, IOException {
         String url = "http://localhost:8080/home/gameWeekResults";
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<GameResultDto[]> responseGames = restTemplate.getForEntity(
@@ -68,7 +67,7 @@ public class HomeController {
                     + " yellow: " + game.getHomeYellow() + "|" + game.getAwayYellow());
         }
         System.out.println("**** size games: " + games.length + "******");
-
-        return "successfully downloaded events";
+        model.addAttribute("games", games);
+        return "game_results_display";
     }
 }
