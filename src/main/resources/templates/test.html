@@ -3,13 +3,15 @@
 
 <div layout:fragment="content">
 
-    <p th:text="GAMES"></p>
+    <p>"TEST HTTP POST CLIENT"</p>
 
-    <a href="/home/gameWeekSchedule">CLICK TO GENERATE GAMEWEEK</a>
+    <div>
+        <p th:text="${username}">Error</p>
+        <p th:text="${password}">Error</p>
+        <p th:text="${test}"></p>
+    </div>
 
-    <a href="/home/gameWeekResults">CLICK TO GENERATE GAMEWEEK RESULTS</a>
-
-
+    test
 </div>
 
 </html>

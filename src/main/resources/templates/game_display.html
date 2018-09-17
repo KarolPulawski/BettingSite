@@ -14,6 +14,9 @@
             <td>1</td>
             <td>X</td>
             <td>2</td>
+            <td>bet 1</td>
+            <td>bet X</td>
+            <td>bet 2</td>
         </thead>
 
         <tr th:each="game: ${games}">
@@ -24,7 +27,12 @@
             <td th:text="${game.homeOdd}"></td>
             <td th:text="${game.drawOdd}"></td>
             <td th:text="${game.awayOdd}"></td>
+
+            <td><a th:href="@{/home/{id}/order(id=${product.id})}">Order</a></td>
+
         </tr>
     </table>
 </div>
 </html>
+
+<!--<td><a th:href="@{/home/{id}/order(id=${product.id})}">Order</a></td>-->
