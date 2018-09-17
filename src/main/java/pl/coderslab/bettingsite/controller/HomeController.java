@@ -79,7 +79,7 @@ public class HomeController {
 
     @PostMapping("/api/game")
     public String receiveInfoFromApi(@RequestBody GameDto game) {
-
+        System.out.print("****** scheduled");
         System.out.print(game.getTeamHome());
         System.out.print(" | ");
         System.out.print(game.getTeamAway());
@@ -95,9 +95,28 @@ public class HomeController {
         System.out.print(game.getAwayOdd());
         System.out.print("\n");
         // save to db new games
+        return "test";
+    }
 
+    @PostMapping("/api/result")
+    public String receiveResultApi(@RequestBody GameResultDto game) {
 
-        return "forward:/api/display";
+        System.out.print("****** result");
+        System.out.print(game.getTeamHome());
+        System.out.print(" | ");
+        System.out.print(game.getHomeGoal());
+        System.out.print(" | ");
+        System.out.print(game.getAwayGoal());
+        System.out.print(" | ");
+        System.out.print(game.getTeamAway());
+        System.out.print(" | ");
+        System.out.print(game.isActive());
+        System.out.print(" | ");
+        System.out.print(game.isHistory());
+        System.out.print(" | ");
+        // save to db new games
+        return "test";
+
     }
 
     @GetMapping("/games/active/display")

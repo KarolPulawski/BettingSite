@@ -1,4 +1,4 @@
-<html xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+<html xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
       layout:decorator="layout_main">
 
 <div layout:fragment="content">
@@ -28,10 +28,19 @@
             <td th:text="${game.drawOdd}"></td>
             <td th:text="${game.awayOdd}"></td>
 
-            <!--<td><a th:href="@{/ticket/{game_id}/1/create(game_id=${game.gameId})}">Order</a></td>-->
             <td>
-                <form action="/ticket/${game.gameId}/1/create" method="get">
-                    <button type="submit">Bet 1</button>
+                <form th:action="@{/ticket/{game_id}/1/create(game_id = ${game.gameId})}" method="get">
+                    <button name="playerId" th:text="${game.getHomeOdd()}" type="submit"></button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{/ticket/{game_id}/X/create(game_id = ${game.gameId})}" method="get">
+                    <button name="playerId" th:text="${game.getDrawOdd()}" type="submit"></button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{/ticket/{game_id}/2/create(game_id = ${game.gameId})}" method="get">
+                    <button name="playerId" th:text="${game.getAwayOdd()}" type="submit"></button>
                 </form>
             </td>
         </tr>
