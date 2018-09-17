@@ -97,7 +97,6 @@ public class HomeController {
         // save to db new games
 
 
-
         return "forward:/api/display";
     }
 
