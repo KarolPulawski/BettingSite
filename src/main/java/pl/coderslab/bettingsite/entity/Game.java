@@ -1,47 +1,46 @@
 package pl.coderslab.bettingsite.entity;
 
-import pl.coderslab.bettingsite.model.GameDto;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "games")
 public class Game {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String teamHome;
-    private String teamAway;
+    @OneToOne
+    private Team teamHome;
 
-    private String competition;
+    @OneToOne
+    private Team teamAway;
 
-    private double homeOdd;
-    private double drawOdd;
-    private double awayOdd;
+    @OneToOne
+    private Competition competition;
+
+    @OneToOne
+    private Odd odd;
 
     private Timestamp started;
 
-    private boolean active;
-    private boolean history;
+    private Boolean active;
+    private Boolean history;
+
+    private int homeGoal;
+    private int homeCorner;
+    private int homeYellow;
+    private int homeRed;
+    private int homePenalty;
+    private int homePoint;
+    private int awayGoal;
+    private int awayCorner;
+    private int awayYellow;
+    private int awayRed;
+    private int awayPenalty;
+    private int awayPoint;
 
     public Game() {
-    }
-
-    public Game(GameDto gameDto) {
-        this.teamHome = gameDto.getTeamHome();
-        this.teamAway = gameDto.getTeamAway();
-
-        this.homeOdd = gameDto.getHomeOdd();
-        this.drawOdd = gameDto.getDrawOdd();
-        this.awayOdd = gameDto.getAwayOdd();
-
-        this.active = gameDto.isActive();
-        this.history = gameDto.isHistory();
     }
 
     public Integer getId() {
@@ -52,68 +51,36 @@ public class Game {
         this.id = id;
     }
 
-    public String getTeamHome() {
+    public Team getTeamHome() {
         return teamHome;
     }
 
-    public void setTeamHome(String teamHome) {
+    public void setTeamHome(Team teamHome) {
         this.teamHome = teamHome;
     }
 
-    public String getTeamAway() {
+    public Team getTeamAway() {
         return teamAway;
     }
 
-    public void setTeamAway(String teamAway) {
+    public void setTeamAway(Team teamAway) {
         this.teamAway = teamAway;
     }
 
-    public String getCompetition() {
+    public Competition getCompetition() {
         return competition;
     }
 
-    public void setCompetition(String competition) {
+    public void setCompetition(Competition competition) {
         this.competition = competition;
     }
 
-    public boolean isActive() {
-        return active;
+    public Odd getOdd() {
+        return odd;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public boolean isHistory() {
-        return history;
-    }
-
-    public void setHistory(boolean history) {
-        this.history = history;
-    }
-
-    public double getHomeOdd() {
-        return homeOdd;
-    }
-
-    public void setHomeOdd(double homeOdd) {
-        this.homeOdd = homeOdd;
-    }
-
-    public double getDrawOdd() {
-        return drawOdd;
-    }
-
-    public void setDrawOdd(double drawOdd) {
-        this.drawOdd = drawOdd;
-    }
-
-    public double getAwayOdd() {
-        return awayOdd;
-    }
-
-    public void setAwayOdd(double awayOdd) {
-        this.awayOdd = awayOdd;
+    public void setOdd(Odd odd) {
+        this.odd = odd;
     }
 
     public Timestamp getStarted() {
@@ -122,6 +89,118 @@ public class Game {
 
     public void setStarted(Timestamp started) {
         this.started = started;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public Boolean getHistory() {
+        return history;
+    }
+
+    public void setHistory(Boolean history) {
+        this.history = history;
+    }
+
+    public int getHomeGoal() {
+        return homeGoal;
+    }
+
+    public void setHomeGoal(int homeGoal) {
+        this.homeGoal = homeGoal;
+    }
+
+    public int getHomeCorner() {
+        return homeCorner;
+    }
+
+    public void setHomeCorner(int homeCorner) {
+        this.homeCorner = homeCorner;
+    }
+
+    public int getHomeYellow() {
+        return homeYellow;
+    }
+
+    public void setHomeYellow(int homeYellow) {
+        this.homeYellow = homeYellow;
+    }
+
+    public int getHomeRed() {
+        return homeRed;
+    }
+
+    public void setHomeRed(int homeRed) {
+        this.homeRed = homeRed;
+    }
+
+    public int getHomePenalty() {
+        return homePenalty;
+    }
+
+    public void setHomePenalty(int homePenalty) {
+        this.homePenalty = homePenalty;
+    }
+
+    public int getHomePoint() {
+        return homePoint;
+    }
+
+    public void setHomePoint(int homePoint) {
+        this.homePoint = homePoint;
+    }
+
+    public int getAwayGoal() {
+        return awayGoal;
+    }
+
+    public void setAwayGoal(int awayGoal) {
+        this.awayGoal = awayGoal;
+    }
+
+    public int getAwayCorner() {
+        return awayCorner;
+    }
+
+    public void setAwayCorner(int awayCorner) {
+        this.awayCorner = awayCorner;
+    }
+
+    public int getAwayYellow() {
+        return awayYellow;
+    }
+
+    public void setAwayYellow(int awayYellow) {
+        this.awayYellow = awayYellow;
+    }
+
+    public int getAwayRed() {
+        return awayRed;
+    }
+
+    public void setAwayRed(int awayRed) {
+        this.awayRed = awayRed;
+    }
+
+    public int getAwayPenalty() {
+        return awayPenalty;
+    }
+
+    public void setAwayPenalty(int awayPenalty) {
+        this.awayPenalty = awayPenalty;
+    }
+
+    public int getAwayPoint() {
+        return awayPoint;
+    }
+
+    public void setAwayPoint(int awayPoint) {
+        this.awayPoint = awayPoint;
     }
 }
 

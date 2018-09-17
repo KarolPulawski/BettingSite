@@ -1,6 +1,7 @@
 package pl.coderslab.bettingsite.controller;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,8 +10,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import pl.coderslab.bettingsite.entity.Game;
+import pl.coderslab.bettingsite.entity.Odd;
+import pl.coderslab.bettingsite.entity.Team;
 import pl.coderslab.bettingsite.model.GameDto;
 import pl.coderslab.bettingsite.model.GameResultDto;
+import pl.coderslab.bettingsite.service.impl.GameServiceImpl;
+import pl.coderslab.bettingsite.service.impl.OddServiceImpl;
+import pl.coderslab.bettingsite.service.impl.TeamServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +29,15 @@ import java.util.Map;
 @Controller
 @RequestMapping
 public class HomeController {
+
+    @Autowired
+    private GameServiceImpl gameServiceImpl;
+
+    @Autowired
+    private TeamServiceImpl teamServiceImpl;
+
+    @Autowired
+    private OddServiceImpl oddServiceImpl;
 
     @RequestMapping("/home")
     public String myHome() {
@@ -81,25 +96,42 @@ public class HomeController {
     @PostMapping("/api/game")
     public String receiveInfoFromApi(@RequestBody GameDto gameDto) {
 
-        Game newGame = new Game(gameDto);
+        Game newGame = new Game();
+
+        Team teamHome = teamServiceImpl.loadTeamByName(gameDto.getTeamHome());
+        Team teamAway = teamServiceImpl.loadTeamByName(gameDto.getTeamAway());
+        newGame.setTeamHome(teamHome);
+        newGame.setTeamAway(teamAway);
+
+        newGame.setActive(gameDto.isActive());
+        newGame.setHistory(gameDto.isHistory());
+
+        Odd odd = new Odd();
+        odd.setAwayOdd(gameDto.getAwayOdd());
+        odd.setDrawOdd(gameDto.getDrawOdd());
+        odd.setHomeOdd(gameDto.getHomeOdd());
+        oddServiceImpl.addNewOdd(odd);
+        newGame.setOdd(odd);
+
 
         System.out.print("****** scheduled");
-        System.out.print(newGame.getTeamHome());
+        System.out.print(newGame.getTeamHome().getName());
         System.out.print(" | ");
-        System.out.print(newGame.getTeamAway());
+        System.out.print(newGame.getTeamAway().getName());
         System.out.print(" | ");
-        System.out.print(newGame.isActive());
+        System.out.print(newGame.getActive());
         System.out.print(" | ");
-        System.out.print(newGame.isHistory());
-        System.out.print(" | ");
-        System.out.print(newGame.getHomeOdd());
-        System.out.print(" | ");
-        System.out.print(newGame.getDrawOdd());
-        System.out.print(" | ");
-        System.out.print(newGame.getAwayOdd());
+        System.out.print(newGame.getHistory());
+//        System.out.print(" | ");
+//        System.out.print(newGame.getHomeOdd());
+//        System.out.print(" | ");
+//        System.out.print(newGame.getDrawOdd());
+//        System.out.print(" | ");
+//        System.out.print(newGame.getAwayOdd());
         System.out.print("\n");
         
         // save to db new games
+        gameServiceImpl.saveGameToDb(newGame);
         return "test";
     }
 
