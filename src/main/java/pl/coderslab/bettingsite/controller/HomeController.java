@@ -1,14 +1,12 @@
 package pl.coderslab.bettingsite.controller;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import pl.coderslab.bettingsite.model.GameDto;
 import pl.coderslab.bettingsite.model.GameResultDto;
@@ -18,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping
@@ -77,34 +77,41 @@ public class HomeController {
         return "game_results_display";
     }
 
-    @PostMapping("/api/info")
-    public String receiveInfoFromApi(HttpServletRequest request) {
-        String name = request.getParameter("username");
-        String pass = request.getParameter("password");
-        String test = "test123";
+    @PostMapping("/api/game")
+    public String receiveInfoFromApi(@RequestBody GameDto game) {
 
-//        HttpSession sess = request.getSession();
-//        sess.setAttribute("username", name);
-//        sess.setAttribute("password", pass);
-        System.out.println("from betting site: " + name + " | " + pass);
-//        receiveInfoFromApiGet(request, model);
+        System.out.print(game.getTeamHome());
+        System.out.print(" | ");
+        System.out.print(game.getTeamAway());
+        System.out.print(" | ");
+        System.out.print(game.isActive());
+        System.out.print(" | ");
+        System.out.print(game.isHistory());
+        System.out.print(" | ");
+        System.out.print(game.getHomeOdd());
+        System.out.print(" | ");
+        System.out.print(game.getDrawOdd());
+        System.out.print(" | ");
+        System.out.print(game.getAwayOdd());
+        System.out.print("\n");
+        // save to db new games
+
+
+
         return "forward:/api/display";
     }
 
-    @GetMapping("/api/display")
-    public String receiveInfoFromApiGet(HttpServletRequest request, Model model) {
-//        HttpSession sess = request.getSession();
-        model.addAttribute("username", request.getAttribute("username"));
-        model.addAttribute("password", request.getAttribute("password"));
-        model.addAttribute("test", "test1234");
-        System.out.println("info from api display");
-        return "test";
+    @GetMapping("/games/active/display")
+    public String displayAllActiveGame() {
+        return "game_display";
     }
 
-//    @PostMapping("/ticket/{game_id}/{type}/create")
-//    public String receiveOneGameTicket(){
-//        // create model attribute ticket List of game
-//    }
+    @GetMapping("/ticket/{game_id}/{type}/create")
+    public String receiveOneGameTicket(@PathVariable String game_id, @PathVariable String type){
+        // create model attribute ticket List of game
+        System.out.println(game_id + "-" + type);
+        return "redirect:/get-events";
+    }
 
 
 }

@@ -28,8 +28,12 @@
             <td th:text="${game.drawOdd}"></td>
             <td th:text="${game.awayOdd}"></td>
 
-            <td><a th:href="@{/home/{id}/order(id=${product.id})}">Order</a></td>
-
+            <!--<td><a th:href="@{/ticket/{game_id}/1/create(game_id=${game.gameId})}">Order</a></td>-->
+            <td>
+                <form action="/ticket/${game.gameId}/1/create" method="get">
+                    <button type="submit">Bet 1</button>
+                </form>
+            </td>
         </tr>
     </table>
 </div>
