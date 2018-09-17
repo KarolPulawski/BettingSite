@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import pl.coderslab.bettingsite.entity.Game;
 import pl.coderslab.bettingsite.model.GameDto;
 import pl.coderslab.bettingsite.model.GameResultDto;
 
@@ -78,22 +79,26 @@ public class HomeController {
     }
 
     @PostMapping("/api/game")
-    public String receiveInfoFromApi(@RequestBody GameDto game) {
+    public String receiveInfoFromApi(@RequestBody GameDto gameDto) {
+
+        Game newGame = new Game(gameDto);
+
         System.out.print("****** scheduled");
-        System.out.print(game.getTeamHome());
+        System.out.print(newGame.getTeamHome());
         System.out.print(" | ");
-        System.out.print(game.getTeamAway());
+        System.out.print(newGame.getTeamAway());
         System.out.print(" | ");
-        System.out.print(game.isActive());
+        System.out.print(newGame.isActive());
         System.out.print(" | ");
-        System.out.print(game.isHistory());
+        System.out.print(newGame.isHistory());
         System.out.print(" | ");
-        System.out.print(game.getHomeOdd());
+        System.out.print(newGame.getHomeOdd());
         System.out.print(" | ");
-        System.out.print(game.getDrawOdd());
+        System.out.print(newGame.getDrawOdd());
         System.out.print(" | ");
-        System.out.print(game.getAwayOdd());
+        System.out.print(newGame.getAwayOdd());
         System.out.print("\n");
+        
         // save to db new games
         return "test";
     }
