@@ -11,16 +11,15 @@ import org.springframework.web.client.RestTemplate;
 import pl.coderslab.bettingsite.entity.*;
 import pl.coderslab.bettingsite.model.GameDto;
 import pl.coderslab.bettingsite.model.GameResultDto;
-import pl.coderslab.bettingsite.repository.UserRepository;
 import pl.coderslab.bettingsite.service.StatisticService;
-import pl.coderslab.bettingsite.service.impl.GameServiceImpl;
-import pl.coderslab.bettingsite.service.impl.OddServiceImpl;
-import pl.coderslab.bettingsite.service.impl.TeamServiceImpl;
+import pl.coderslab.bettingsite.service.UserService;
+import pl.coderslab.bettingsite.service.impl.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.*;
 
 @Controller
@@ -40,7 +39,13 @@ public class HomeController {
     private StatisticService statisticService;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
+
+    @Autowired
+    private TicketServiceImpl ticketServiceImpl;
+
+    @Autowired
+    private BetServiceImpl betServiceImpl;
 
     @RequestMapping("/home")
     public String myHome() {
@@ -197,26 +202,21 @@ public class HomeController {
         return "game_results_display";
     }
 
-//    @ModelAttribute("gamesInTicket")
-//    public Map<Game, String> gamesInTicket() {
-//
-//    }
-
-    private Map<Game, String> gamesInTicket = new TreeMap<>();
-
     @GetMapping("/ticket/create")
     public String createNewTicket(HttpServletRequest request) {
         HttpSession sess = request.getSession();
         Set<Bet> bets = new HashSet<>();
+        double totalOdd = 1.0;
         sess.setAttribute("bets", bets);
+        sess.setAttribute("totalOdd", totalOdd);
         return "redirect:/games/scheduled/display";
     }
 
     @GetMapping("/ticket/{game_id}/{type}/create")
     public String createBet(HttpServletRequest request, @PathVariable String game_id, @PathVariable String type){
-        //create Map of games
         HttpSession sess = request.getSession();
         Set<Bet> bets = (Set<Bet>) sess.getAttribute("bets");
+        double totalOdd = (double)sess.getAttribute("totalOdd");
         Game game = gameServiceImpl.findGameById(Integer.parseInt(game_id));
 
         double currentOdd = 0.0;
@@ -233,26 +233,55 @@ public class HomeController {
 
         Bet bet = new Bet(game, type, currentOdd);
         try {
-            if(!bets.contains(bet))
+            if(!bets.contains(bet)) {
                 bets.add(bet);
+                totalOdd *= currentOdd;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("BET IS ALREADY EXIST");
         }
+        totalOdd = Math.round(totalOdd * 100)/100.0;
+//        DecimalFormat df = new DecimalFormat("0.00");
+//        totalOdd = Double.parseDouble(df.format(totalOdd));
         sess.setAttribute("bets", bets);
+        sess.setAttribute("totalOdd", totalOdd);
 
-        // create model attribute ticket List of game
-        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        User currentUser = userRepository.findByEmail(userName);
-        Ticket ticket = new Ticket();
 
-        bets.forEach(v -> System.out.println("NEW BET !!" + v.getGame().getTeamHome() + " | "));
-
-        System.out.println(currentUser.getId());
-        System.out.println(currentUser.getEmail());
-        System.out.println(currentUser.getLastName());
-        System.out.println(currentUser.getPassword());
-        System.out.println(game_id + "-" + type);
         return "redirect:/games/scheduled/display";
+    }
+
+    @RequestMapping("/ticket/submit")
+    public String submitTicket(HttpServletRequest request, Model model) {
+        HttpSession sess = request.getSession();
+        //download session -> bets
+        Set<Bet> bets = (Set<Bet>) sess.getAttribute("bets");
+        double stake = Double.parseDouble(request.getParameter("stake"));
+
+        // create ticket
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userService.findUserByEmail(userName);
+
+        Boolean active = true;
+        Boolean paid = false;
+        Boolean win = false;
+
+        Ticket ticket = new Ticket(bets, currentUser, active, paid, win, stake);
+
+        double totalOdd = 1.0;
+        //save bets to db
+        for(Bet b : bets) {
+            totalOdd *= b.getOdd();
+            betServiceImpl.addBetToDb(b);
+        }
+        ticketServiceImpl.addNewTicketToDb(ticket);
+        model.addAttribute("ticket", ticket);
+//        return "redirect:/games/scheduled/display";
+        return "ticket_display";
+    }
+
+    @RequestMapping("/ticket/displayAll")
+    public String displayCreatedTicket() {
+        return "tickets_display";
     }
 }

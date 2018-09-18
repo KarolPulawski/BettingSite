@@ -1,0 +1,41 @@
+<html xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layout_main">
+
+<div layout:fragment="content">
+
+    <p th:text= "'Ticket info: '"></p>
+
+    <p th:text="'Ticket id: ' + ${ticket.id}"></p>
+    <p th:text="'Ticket is win?: ' + ${ticket.win}"></p>
+    <p th:text="'Ticket is active?: ' + ${ticket.active}"></p>
+    <p th:text="'Ticket is paid?: ' + ${ticket.paid}"></p>
+    <p th:text="'Ticket stake: ' + ${ticket.stake}"></p>
+
+    <p th:text= "'Bets: '"></p>
+
+    <table>
+        <thead>
+        <td>bet id</td>
+        <td>home</td>
+        <td>away</td>
+        <td>starts at</td>
+        <td>type</td>
+
+        </thead>
+
+        <tr th:each="bet: ${ticket.bets}">
+            <td th:text="${bet.id}"></td>
+            <td th:text="${bet.game.teamHome.name}"></td>
+            <td th:text="${bet.game.teamAway.name}"></td>
+            <td th:text="${bet.game.started}"></td>
+            <td th:text="${bet.type}"></td>
+        </tr>
+    </table>
+
+    <a th:href="@{/games/scheduled/display}">Back to games</a>
+
+
+</div>
+</html>
+
+<!--<td><a th:href="@{/home/{id}/order(id=${product.id})}">Order</a></td>-->

@@ -1,7 +1,9 @@
 package pl.coderslab.bettingsite.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "tickets")
@@ -20,11 +22,21 @@ public class Ticket {
     private Boolean paid;
     private Boolean win;
 
-    private String selection;
-
-    private Integer stake;
+    private double stake;
 
     public Ticket() {
+    }
+
+    public Ticket(Set<Bet> bets, User user, Boolean active, Boolean paid, Boolean win, double stake) {
+        this.bets = new ArrayList<>();
+        for(Bet bet : bets) {
+            this.bets.add(bet);
+        }
+        this.user = user;
+        this.active = active;
+        this.paid = paid;
+        this.win = win;
+        this.stake = stake;
     }
 
     public Integer getId() {
@@ -51,19 +63,11 @@ public class Ticket {
         this.user = user;
     }
 
-    public String getSelection() {
-        return selection;
-    }
-
-    public void setSelection(String selection) {
-        this.selection = selection;
-    }
-
-    public Integer getStake() {
+    public double getStake() {
         return stake;
     }
 
-    public void setStake(Integer stake) {
+    public void setStake(double stake) {
         this.stake = stake;
     }
 

@@ -106,11 +106,9 @@ public class StatisticService {
             awayOdd = Math.exp(1-difference);
         }
 
-        DecimalFormat df = new DecimalFormat("0.00");
-
-        return new Odd(Double.parseDouble(df.format(homeOdd)),
-                Double.parseDouble(df.format(calculateDrawOdd(homeOdd, awayOdd))),
-                Double.parseDouble(df.format(awayOdd)));
+        return new Odd(Math.round(homeOdd * 100)/100.0,
+                Math.round(calculateDrawOdd(homeOdd, awayOdd) * 100)/100.0,
+                Math.round(awayOdd * 100)/100.0);
     }
 
     private double calculateDrawOdd(double hOdd, double aOdd) {
