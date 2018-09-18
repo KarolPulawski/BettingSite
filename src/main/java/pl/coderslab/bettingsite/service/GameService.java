@@ -24,4 +24,6 @@ public interface GameService {
     Game findFirstByTeamHome(Team teamHome);
 
     Game findFirstScheduleByTeam(Team teamHome);
+
+    Game findGameById(int id);
 }

@@ -18,11 +18,10 @@ import pl.coderslab.bettingsite.service.impl.OddServiceImpl;
 import pl.coderslab.bettingsite.service.impl.TeamServiceImpl;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @Controller
 @RequestMapping
@@ -206,25 +205,29 @@ public class HomeController {
     private Map<Game, String> gamesInTicket = new TreeMap<>();
 
     @GetMapping("/ticket/create")
-    public String createNewTicket() {
-        Ticket ticket = new Ticket();
-//        ticket.set
-        return "";
+    public String createNewTicket(HttpServletRequest request) {
+        HttpSession sess = request.getSession();
+        List<Bet> bets = new ArrayList<>();
+        sess.setAttribute("bets", bets);
+        return "redirect:/games/scheduled/display";
     }
 
     @GetMapping("/ticket/{game_id}/{type}/create")
-    public String receiveOneGameTicket(@PathVariable String game_id, @PathVariable String type){
+    public String createBet(HttpServletRequest request, @PathVariable String game_id, @PathVariable String type){
         //create Map of games
-
-
-
-
+        HttpSession sess = request.getSession();
+        List<Bet> bets = (List<Bet>) sess.getAttribute("bets");
+        Game game = gameServiceImpl.findGameById(Integer.parseInt(game_id));
+        Bet bet = new Bet(game, type);
+        bets.add(bet);
+        sess.setAttribute("bets", bets);
 
         // create model attribute ticket List of game
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         User currentUser = userRepository.findByEmail(userName);
         Ticket ticket = new Ticket();
 
+        bets.forEach(v -> System.out.println("NEW BET !!" + v.getGame().getTeamHome() + " | "));
 
         System.out.println(currentUser.getId());
         System.out.println(currentUser.getEmail());

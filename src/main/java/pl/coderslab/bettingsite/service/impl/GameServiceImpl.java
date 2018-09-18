@@ -60,4 +60,9 @@ public class GameServiceImpl implements GameService {
     public Game findFirstScheduleByTeam(Team teamHome) {
         return gameRepository.findFirstByTeamHomeAndActiveFalseAndHistoryFalse(teamHome);
     }
+
+    @Override
+    public Game findGameById(int id) {
+        return gameRepository.findOne(id);
+    }
 }

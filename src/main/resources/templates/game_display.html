@@ -45,6 +45,23 @@
             </td>
         </tr>
     </table>
+
+
+    <p th:text= "'TICKET for user: ' + ${userName}"></p>
+
+    <table>
+        <thead>
+        <td>bet id</td>
+
+        </thead>
+
+        <tr th:each="bet: ${session.bets}">
+            <td th:text="${bet.id}"></td>
+            <td th:text="${bet.game.homePoint}"></td>
+            <td th:text="${bet.type}"></td>
+
+        </tr>
+    </table>
 </div>
 </html>
 
