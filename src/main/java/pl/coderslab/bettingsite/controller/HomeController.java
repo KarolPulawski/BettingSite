@@ -207,7 +207,7 @@ public class HomeController {
     @GetMapping("/ticket/create")
     public String createNewTicket(HttpServletRequest request) {
         HttpSession sess = request.getSession();
-        List<Bet> bets = new ArrayList<>();
+        Set<Bet> bets = new HashSet<>();
         sess.setAttribute("bets", bets);
         return "redirect:/games/scheduled/display";
     }
@@ -216,10 +216,29 @@ public class HomeController {
     public String createBet(HttpServletRequest request, @PathVariable String game_id, @PathVariable String type){
         //create Map of games
         HttpSession sess = request.getSession();
-        List<Bet> bets = (List<Bet>) sess.getAttribute("bets");
+        Set<Bet> bets = (Set<Bet>) sess.getAttribute("bets");
         Game game = gameServiceImpl.findGameById(Integer.parseInt(game_id));
-        Bet bet = new Bet(game, type);
-        bets.add(bet);
+
+        double currentOdd = 0.0;
+
+        if(type.equals("1")) {
+            currentOdd = game.getOdd().getHomeOdd();
+        } else if (type.equals("X")) {
+            currentOdd = game.getOdd().getDrawOdd();
+        } else if (type.equals("2")) {
+            currentOdd = game.getOdd().getAwayOdd();
+        } else {
+            currentOdd = 1.0;
+        }
+
+        Bet bet = new Bet(game, type, currentOdd);
+        try {
+            if(!bets.contains(bet))
+                bets.add(bet);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("BET IS ALREADY EXIST");
+        }
         sess.setAttribute("bets", bets);
 
         // create model attribute ticket List of game

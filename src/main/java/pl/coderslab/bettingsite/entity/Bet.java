@@ -1,7 +1,7 @@
 package pl.coderslab.bettingsite.entity;
 
 import javax.persistence.*;
-import java.util.Map;
+import java.util.Objects;
 
 @Entity
 @Table(name = "bets")
@@ -15,12 +15,15 @@ public class Bet {
 
     private String type;
 
+    private double odd;
+
     public Bet() {
     }
 
-    public Bet(Game game, String type) {
+    public Bet(Game game, String type, double odd) {
         this.game = game;
         this.type = type;
+        this.odd = odd;
     }
 
     public Integer getId() {
@@ -45,5 +48,32 @@ public class Bet {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public double getOdd() {
+        return odd;
+    }
+
+    public void setOdd(double odd) {
+        this.odd = odd;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        try {
+            int id1 = this.game.getId();
+            int id2 = ((Bet) o).game.getId();
+            boolean result = id1 == id2;
+           return result;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getGame().getId());
     }
 }

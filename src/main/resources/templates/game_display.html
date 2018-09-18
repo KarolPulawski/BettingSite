@@ -49,16 +49,26 @@
 
     <p th:text= "'TICKET for user: ' + ${userName}"></p>
 
+    <form action="/ticket/create" method="get">
+        <button name="playerId" type="submit">Create new ticket</button>
+    </form>
+
     <table>
         <thead>
         <td>bet id</td>
+        <td>home team</td>
+        <td>away team</td>
+        <td>type</td>
+        <td>odd</td>
 
         </thead>
 
         <tr th:each="bet: ${session.bets}">
             <td th:text="${bet.id}"></td>
-            <td th:text="${bet.game.homePoint}"></td>
+            <td th:text="${bet.game.teamHome.name}"></td>
+            <td th:text="${bet.game.teamAway.name}"></td>
             <td th:text="${bet.type}"></td>
+            <td th:text="${bet.odd}"></td>
 
         </tr>
     </table>
