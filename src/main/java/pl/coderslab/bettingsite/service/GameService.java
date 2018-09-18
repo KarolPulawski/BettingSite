@@ -2,6 +2,7 @@ package pl.coderslab.bettingsite.service;
 
 import org.springframework.stereotype.Service;
 import pl.coderslab.bettingsite.entity.Game;
+import pl.coderslab.bettingsite.entity.Team;
 
 import java.util.List;
 
@@ -17,4 +18,10 @@ public interface GameService {
 
     List<Game> totalPointsLastThreeHomeMatches(int teamId);
     List<Game> totalPointsLastThreeAwayMatches(int teamId);
+
+    Game findActiveGameByTeam(Team team);
+
+    Game findFirstByTeamHome(Team teamHome);
+
+    Game findFirstScheduleByTeam(Team teamHome);
 }

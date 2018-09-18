@@ -3,6 +3,7 @@ package pl.coderslab.bettingsite.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.coderslab.bettingsite.entity.Game;
+import pl.coderslab.bettingsite.entity.Team;
 import pl.coderslab.bettingsite.repository.GameRepository;
 import pl.coderslab.bettingsite.service.GameService;
 
@@ -43,5 +44,20 @@ public class GameServiceImpl implements GameService {
     @Override
     public List<Game> totalPointsLastThreeAwayMatches(int teamId) {
         return gameRepository.findTotalPointsLastThreeMatchesAway(teamId);
+    }
+
+    @Override
+    public Game findActiveGameByTeam(Team team) {
+        return gameRepository.findByActiveFalseAndTeamHome(team);
+    }
+
+    @Override
+    public Game findFirstByTeamHome(Team teamHome) {
+        return gameRepository.findFirstByTeamHome(teamHome);
+    }
+
+    @Override
+    public Game findFirstScheduleByTeam(Team teamHome) {
+        return gameRepository.findFirstByTeamHomeAndActiveFalseAndHistoryFalse(teamHome);
     }
 }

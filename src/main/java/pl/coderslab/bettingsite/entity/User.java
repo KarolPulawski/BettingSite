@@ -38,6 +38,12 @@ public class User {
     public User() {
     }
 
+    public User(String password, String name, Set<Role> roles) {
+        this.password = password;
+        this.name = name;
+        this.roles = roles;
+    }
+
     public Integer getId() {
         return id;
     }

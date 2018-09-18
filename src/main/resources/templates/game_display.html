@@ -3,7 +3,7 @@
 
 <div layout:fragment="content">
 
-    <p th:text="GAMES"></p>
+    <p th:text="GAMES for user ${userName}"></p>
 
     <table>
         <thead>
@@ -20,27 +20,27 @@
         </thead>
 
         <tr th:each="game: ${games}">
-            <td th:text="${game.gameId}"></td>
-            <td th:text="${game.teamHome}"></td>
-            <td th:text="${game.teamAway}"></td>
+            <td th:text="${game.id}"></td>
+            <td th:text="${game.teamHome.name}"></td>
+            <td th:text="${game.teamAway.name}"></td>
             <td th:text="${game.started}"></td>
-            <td th:text="${game.homeOdd}"></td>
-            <td th:text="${game.drawOdd}"></td>
-            <td th:text="${game.awayOdd}"></td>
+            <td th:text="${game.odd.homeOdd}"></td>
+            <td th:text="${game.odd.drawOdd}"></td>
+            <td th:text="${game.odd.awayOdd}"></td>
 
             <td>
-                <form th:action="@{/ticket/{game_id}/1/create(game_id = ${game.gameId})}" method="get">
-                    <button name="playerId" th:text="${game.getHomeOdd()}" type="submit"></button>
+                <form th:action="@{/ticket/{game_id}/1/create(game_id = ${game.id})}" method="get">
+                    <button name="playerId" th:text="${game.odd.homeOdd}" type="submit"></button>
                 </form>
             </td>
             <td>
-                <form th:action="@{/ticket/{game_id}/X/create(game_id = ${game.gameId})}" method="get">
-                    <button name="playerId" th:text="${game.getDrawOdd()}" type="submit"></button>
+                <form th:action="@{/ticket/{game_id}/X/create(game_id = ${game.id})}" method="get">
+                    <button name="playerId" th:text="${game.odd.drawOdd}" type="submit"></button>
                 </form>
             </td>
             <td>
-                <form th:action="@{/ticket/{game_id}/2/create(game_id = ${game.gameId})}" method="get">
-                    <button name="playerId" th:text="${game.getAwayOdd()}" type="submit"></button>
+                <form th:action="@{/ticket/{game_id}/2/create(game_id = ${game.id})}" method="get">
+                    <button name="playerId" th:text="${game.odd.awayOdd}" type="submit"></button>
                 </form>
             </td>
         </tr>
