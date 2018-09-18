@@ -269,19 +269,30 @@ public class HomeController {
         Ticket ticket = new Ticket(bets, currentUser, active, paid, win, stake);
 
         double totalOdd = 1.0;
-        //save bets to db
         for(Bet b : bets) {
             totalOdd *= b.getOdd();
             betServiceImpl.addBetToDb(b);
         }
         ticketServiceImpl.addNewTicketToDb(ticket);
         model.addAttribute("ticket", ticket);
+        Set<Bet> clearSession = new HashSet<>();
+        sess.setAttribute("bets", clearSession);
 //        return "redirect:/games/scheduled/display";
         return "ticket_display";
     }
 
     @RequestMapping("/ticket/displayAll")
-    public String displayCreatedTicket() {
+    public String displayCreatedTicket(Model model) {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userService.findUserByEmail(userName);
+        model.addAttribute("tickets", ticketServiceImpl.findTicketsByCurrentUserWinFalseActiveTrue(currentUser));
         return "tickets_display";
+    }
+
+    @RequestMapping("/ticket/display/{id}")
+    public String displayOneTicket(@PathVariable int id, Model model) {
+        Ticket ticket = ticketServiceImpl.findTicketById(id);
+        model.addAttribute("ticket", ticket);
+        return "ticket_display";
     }
 }

@@ -3,10 +3,30 @@
 
 <div layout:fragment="content">
 
-    <p th:text= "'Ticket '"></p>
+    <p th:text= "'ALL TICKETS '"></p>
 
-    <!--<p th:text="'Ticket id: ' + ${ticket.id}"></p>-->
+    <table>
+        <thead>
+        <td>ticket id</td>
+        <td>stake</td>
+        <td>win</td>
+        <td>active</td>
+        <td>paid</td>
+        <td>details</td>
 
+        </thead>
+
+        <tr th:each="ticket: ${tickets}">
+            <td th:text="${ticket.id}"></td>
+            <td th:text="${ticket.stake}"></td>
+            <td th:text="${ticket.win}"></td>
+            <td th:text="${ticket.active}"></td>
+            <td th:text="${ticket.paid}"></td>
+
+            <td><a th:href="@{/ticket/display/} + ${ticket.id}">Details</a></td>
+        </tr>
+    </table>
+    <a th:href="@{/games/scheduled/display}">Back to games</a>
 </div>
 </html>
 
