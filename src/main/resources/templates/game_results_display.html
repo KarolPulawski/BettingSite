@@ -3,7 +3,7 @@
 
 <div layout:fragment="content">
 
-    <p th:text="GAMES"></p>
+    <p th:text= "'GAMES for user: ' + ${userName}"></p>
 
     <table>
         <thead>
@@ -19,11 +19,12 @@
         </thead>
 
         <tr th:each="game: ${games}">
-            <td th:text="${game.gameId}"></td>
-            <td th:text="${game.teamHome}"></td>
+            <td th:text="${game.id}"></td>
+            <td th:text="${game.teamHome.name}"></td>
             <td th:text="${game.homeGoal}"></td>
             <td th:text="${game.awayGoal}"></td>
-            <td th:text="${game.teamAway}"></td>
+            <td th:text="${game.teamAway.name}"></td>
+            <td th:text="${game.started}"></td>
             <td th:text="${game.homeYellow}"></td>
             <td th:text="${game.awayYellow}"></td>
 

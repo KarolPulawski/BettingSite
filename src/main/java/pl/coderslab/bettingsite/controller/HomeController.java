@@ -1,10 +1,8 @@
 package pl.coderslab.bettingsite.controller;
 
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,8 +11,6 @@ import org.springframework.web.client.RestTemplate;
 import pl.coderslab.bettingsite.entity.Game;
 import pl.coderslab.bettingsite.entity.Odd;
 import pl.coderslab.bettingsite.entity.Team;
-import pl.coderslab.bettingsite.entity.User;
-import pl.coderslab.bettingsite.model.CurrentUser;
 import pl.coderslab.bettingsite.model.GameDto;
 import pl.coderslab.bettingsite.model.GameResultDto;
 import pl.coderslab.bettingsite.service.StatisticService;
@@ -23,12 +19,8 @@ import pl.coderslab.bettingsite.service.impl.OddServiceImpl;
 import pl.coderslab.bettingsite.service.impl.TeamServiceImpl;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping
@@ -59,12 +51,6 @@ public class HomeController {
         return "my moderator page";
 
     }
-
-//    @RequestMapping("/admin/home")
-//    @ResponseBody
-//    public String admin() {
-//        return "admin";
-//    }
 
     @RequestMapping("/get-events")
     public String getScheduledEvents(Model model) throws ServletException, IOException {
@@ -192,7 +178,6 @@ public class HomeController {
     @GetMapping("/games/scheduled/display")
     public String displayAllActiveGame(Model model) {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-
         model.addAttribute("userName", userName);
         List<Game> gamesScheduled = gameServiceImpl.getAllScheduledGames();
         model.addAttribute("games", gamesScheduled);
@@ -201,9 +186,11 @@ public class HomeController {
 
     @GetMapping("/games/results/display")
     public String displayAllResultsGame(Model model) {
-        List<Game> gamesResult = gameServiceImpl.getAllScheduledGames();
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        model.addAttribute("userName", userName);
+        List<Game> gamesResult = gameServiceImpl.getAllActiveGame();
         model.addAttribute("games", gamesResult);
-        return "game_result_display";
+        return "game_results_display";
     }
 
     @GetMapping("/ticket/{game_id}/{type}/create")
@@ -211,8 +198,6 @@ public class HomeController {
         // create model attribute ticket List of game
 
         System.out.println(game_id + "-" + type);
-        return "redirect:/get-events";
+        return "redirect:/games/scheduled/display";
     }
-
-
 }

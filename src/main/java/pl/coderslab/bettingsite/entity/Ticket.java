@@ -1,6 +1,7 @@
 package pl.coderslab.bettingsite.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "tickets")
@@ -9,7 +10,12 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer game_id;
+    @OneToMany
+    private List<Game> games;
+
+    @OneToOne
+    private User user;
+
     private String selection;
 
     public Ticket() {
@@ -23,12 +29,20 @@ public class Ticket {
         this.id = id;
     }
 
-    public Integer getGame_id() {
-        return game_id;
+    public List<Game> getGames() {
+        return games;
     }
 
-    public void setGame_id(Integer game_id) {
-        this.game_id = game_id;
+    public void setGames(List<Game> games) {
+        this.games = games;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getSelection() {
