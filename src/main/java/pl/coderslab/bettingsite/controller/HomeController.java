@@ -8,11 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import pl.coderslab.bettingsite.entity.Game;
-import pl.coderslab.bettingsite.entity.Odd;
-import pl.coderslab.bettingsite.entity.Team;
+import pl.coderslab.bettingsite.entity.*;
 import pl.coderslab.bettingsite.model.GameDto;
 import pl.coderslab.bettingsite.model.GameResultDto;
+import pl.coderslab.bettingsite.repository.UserRepository;
 import pl.coderslab.bettingsite.service.StatisticService;
 import pl.coderslab.bettingsite.service.impl.GameServiceImpl;
 import pl.coderslab.bettingsite.service.impl.OddServiceImpl;
@@ -20,7 +19,10 @@ import pl.coderslab.bettingsite.service.impl.TeamServiceImpl;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 @Controller
 @RequestMapping
@@ -37,6 +39,9 @@ public class HomeController {
 
     @Autowired
     private StatisticService statisticService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @RequestMapping("/home")
     public String myHome() {
@@ -193,10 +198,38 @@ public class HomeController {
         return "game_results_display";
     }
 
+//    @ModelAttribute("gamesInTicket")
+//    public Map<Game, String> gamesInTicket() {
+//
+//    }
+
+    private Map<Game, String> gamesInTicket = new TreeMap<>();
+
+    @GetMapping("/ticket/create")
+    public String createNewTicket() {
+        Ticket ticket = new Ticket();
+//        ticket.set
+        return "";
+    }
+
     @GetMapping("/ticket/{game_id}/{type}/create")
     public String receiveOneGameTicket(@PathVariable String game_id, @PathVariable String type){
-        // create model attribute ticket List of game
+        //create Map of games
 
+
+
+
+
+        // create model attribute ticket List of game
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepository.findByEmail(userName);
+        Ticket ticket = new Ticket();
+
+
+        System.out.println(currentUser.getId());
+        System.out.println(currentUser.getEmail());
+        System.out.println(currentUser.getLastName());
+        System.out.println(currentUser.getPassword());
         System.out.println(game_id + "-" + type);
         return "redirect:/games/scheduled/display";
     }

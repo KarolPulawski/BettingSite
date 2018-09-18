@@ -11,12 +11,18 @@ public class Ticket {
     private Integer id;
 
     @OneToMany
-    private List<Game> games;
+    private List<Bet> bets;
 
     @OneToOne
     private User user;
 
+    private Boolean active;
+    private Boolean paid;
+    private Boolean win;
+
     private String selection;
+
+    private Integer stake;
 
     public Ticket() {
     }
@@ -29,12 +35,12 @@ public class Ticket {
         this.id = id;
     }
 
-    public List<Game> getGames() {
-        return games;
+    public List<Bet> getBets() {
+        return bets;
     }
 
-    public void setGames(List<Game> games) {
-        this.games = games;
+    public void setBets(List<Bet> bets) {
+        this.bets = bets;
     }
 
     public User getUser() {
@@ -51,5 +57,37 @@ public class Ticket {
 
     public void setSelection(String selection) {
         this.selection = selection;
+    }
+
+    public Integer getStake() {
+        return stake;
+    }
+
+    public void setStake(Integer stake) {
+        this.stake = stake;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public Boolean getPaid() {
+        return paid;
+    }
+
+    public void setPaid(Boolean paid) {
+        this.paid = paid;
+    }
+
+    public Boolean getWin() {
+        return win;
+    }
+
+    public void setWin(Boolean win) {
+        this.win = win;
     }
 }
