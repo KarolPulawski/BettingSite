@@ -49,7 +49,7 @@
 
     <p th:text= "'TICKET for user: ' + ${userName}"></p>
 
-    <form action="/ticket/create" method="get">
+    <form action="/ticket/create" method="post">
         <button name="playerId" type="submit">Create new ticket</button>
     </form>
 
@@ -79,7 +79,7 @@
     <!--<input type = "number" name ="b_number" placeholder="b parameter">-->
     <!--<input type = "number" name ="c_number" placeholder="c parameter">-->
 
-    <form action="/ticket/submit" method="get">
+    <form action="/ticket/submit" method="post">
         <input type="number" name="stake">
         <button name="playerId" type="submit">Submit ticket</button>
     </form>

@@ -23,10 +23,16 @@
             <td th:text="${ticket.active}"></td>
             <td th:text="${ticket.paid}"></td>
 
-            <td><a th:href="@{/ticket/display/} + ${ticket.id}">Details</a></td>
+            <td>
+                <form th:action="@{/ticket/display/} + ${ticket.id}" method="post">
+                    <button name="playerId" type="submit">Details</button>
+                </form>
+            </td>
         </tr>
     </table>
+
     <a th:href="@{/games/scheduled/display}">Back to games</a>
+
 </div>
 </html>
 
