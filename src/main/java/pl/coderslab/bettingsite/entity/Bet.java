@@ -7,7 +7,7 @@ import java.util.Objects;
 @Table(name = "bets")
 public class Bet {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
