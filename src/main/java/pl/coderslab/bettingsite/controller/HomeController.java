@@ -1,6 +1,7 @@
 package pl.coderslab.bettingsite.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -155,9 +156,7 @@ public class HomeController {
         currentGame.setHomeRed(gameResultDto.getHomeRed());
         currentGame.setAwayRed(gameResultDto.getAwayRed());
         gameServiceImpl.saveGameToDb(currentGame);
-
         return "test";
-
     }
 
     @GetMapping("/games/scheduled/display")
@@ -218,6 +217,24 @@ public class HomeController {
             System.out.println("BET IS ALREADY EXIST");
         }
         totalOdd = Math.round(totalOdd * 100)/100.0;
+        sess.setAttribute("bets", bets);
+        sess.setAttribute("totalOdd", totalOdd);
+        return "redirect:/games/scheduled/display";
+    }
+
+    @PostMapping("/ticket/delete/{game_id}")
+    public String deleteBetFromTicket(Model model, @PathVariable String game_id, HttpServletRequest request) {
+        HttpSession sess = request.getSession();
+        Set<Bet> bets = (Set<Bet>) sess.getAttribute("bets");
+        Bet bet = betServiceImpl.finBetByGameId(Integer.parseInt(game_id));
+
+        double totalOdd = (double) sess.getAttribute("totalOdd");
+        totalOdd /= bet.getOdd();
+        totalOdd = Math.round(totalOdd * 100)/100.0;
+        if(bets.contains(bet)) {
+            bets.remove(bet);
+        }
+
         sess.setAttribute("bets", bets);
         sess.setAttribute("totalOdd", totalOdd);
         return "redirect:/games/scheduled/display";

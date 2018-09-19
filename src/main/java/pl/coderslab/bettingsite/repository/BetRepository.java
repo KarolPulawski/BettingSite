@@ -6,4 +6,5 @@ import pl.coderslab.bettingsite.entity.Bet;
 
 @Repository
 public interface BetRepository extends JpaRepository<Bet, Integer> {
+    Bet findByGameId(int gameId);
 }

@@ -16,4 +16,14 @@ public class BetServiceImpl implements BetService {
     public void addBetToDb(Bet bet) {
         betRepository.save(bet);
     }
+
+    @Override
+    public Bet findBetById(int bet_id) {
+        return betRepository.findOne(bet_id);
+    }
+
+    @Override
+    public Bet finBetByGameId(int game_id) {
+        return betRepository.findByGameId(game_id);
+    }
 }

@@ -71,7 +71,7 @@
             <td th:text="${bet.type}"></td>
             <td th:text="${bet.odd}"></td>
             <td>
-                <form th:action="@{/ticket/delete/} + ${bet.id}" method="post">
+                <form th:action="@{/ticket/delete/} + ${bet.game.id}" method="post">
                     <button name="playerId" type="submit">X</button>
                 </form>
             </td>

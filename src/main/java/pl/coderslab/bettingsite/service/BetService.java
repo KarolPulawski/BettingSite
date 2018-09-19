@@ -6,4 +6,8 @@ import pl.coderslab.bettingsite.entity.Bet;
 @Service
 public interface BetService {
     void addBetToDb(Bet bet);
+
+    Bet findBetById(int bet_id);
+
+    Bet finBetByGameId(int bet_id);
 }

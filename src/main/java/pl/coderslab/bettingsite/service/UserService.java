@@ -1,6 +1,7 @@
 package pl.coderslab.bettingsite.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.coderslab.bettingsite.entity.Role;
@@ -47,6 +48,11 @@ public class UserService {
         Role userRole = roleRepository.findByRole("USER");
         user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
         userRepository.save(user);
+    }
+
+    public User isLoggedIn() {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByEmail(userName);
     }
 
 }
