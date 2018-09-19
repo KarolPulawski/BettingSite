@@ -20,6 +20,8 @@ public class Ticket {
     @OneToOne
     private User user;
 
+    private Integer uncheckedCounter;
+
     private Boolean active;
     private Boolean paid;
     private Boolean win;
@@ -41,6 +43,7 @@ public class Ticket {
         this.paid = paid;
         this.win = win;
         this.stake = new BigDecimal(stake);
+        this.uncheckedCounter = bets.size();
     }
 
     public Integer getId() {
@@ -121,4 +124,7 @@ public class Ticket {
         this.expectedWin = this.totalOdd.multiply(this.stake);
     }
 
+    public Integer getUncheckedCounter() {
+        return uncheckedCounter;
+    }
 }

@@ -1,5 +1,7 @@
 package pl.coderslab.bettingsite.entity;
 
+import pl.coderslab.bettingsite.model.BetStatus;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -17,16 +19,20 @@ public class Bet {
 
     private double odd;
 
+    @Enumerated(EnumType.STRING)
+    private BetStatus betStatus;
+
     @ManyToOne
     private Ticket ticket;
 
     public Bet() {
     }
 
-    public Bet(Game game, String type, double odd) {
+    public Bet(Game game, String type, double odd, BetStatus betStatus) {
         this.game = game;
         this.type = type;
         this.odd = odd;
+        this.betStatus = betStatus;
     }
 
     public Integer getId() {
@@ -67,6 +73,14 @@ public class Bet {
 
     public void setTicket(Ticket ticket) {
         this.ticket = ticket;
+    }
+
+    public BetStatus getBetStatus() {
+        return betStatus;
+    }
+
+    public void setBetStatus(BetStatus betStatus) {
+        this.betStatus = betStatus;
     }
 
     @Override

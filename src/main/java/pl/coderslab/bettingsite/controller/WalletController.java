@@ -36,7 +36,7 @@ public class WalletController {
         return "redirect:/games/scheduled/display";
     }
 
-    @RequestMapping("/")
+    @RequestMapping("/panel")
     public String walletPanel() {
         return "wallet_panel";
     }

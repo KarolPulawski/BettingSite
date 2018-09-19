@@ -79,9 +79,10 @@
         </tr>
     </table>
 
-    <p th:text="'Total odd: ' + ${session.totalOdd}"></p>
+
 
     <div th:if="${not #lists.isEmpty(session.bets)}">
+        <p th:text="'Total odd: ' + ${session.totalOdd}"></p>
 
         <form action="/ticket/submit" method="post">
             <input type="number" name="stake">
@@ -98,7 +99,7 @@
 
     <a th:href="@{/ticket/displayAll}">DISPLAY ALL TICKETS</a>
     </br>
-    <a th:href="@{/wallet}">WALLET PANEL</a>
+    <a th:href="@{/wallet/panel}">WALLET PANEL</a>
 </div>
 </html>
 

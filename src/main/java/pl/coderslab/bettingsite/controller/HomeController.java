@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.bettingsite.entity.*;
+import pl.coderslab.bettingsite.model.BetStatus;
 import pl.coderslab.bettingsite.model.GameDto;
 import pl.coderslab.bettingsite.model.GameResultDto;
 import pl.coderslab.bettingsite.service.DateService;
@@ -117,15 +118,17 @@ public class HomeController {
             String typeFromUser = bet.getType();
 
             int homePoint = currentGame.getHomePoint();
-            int awayPoint = currentGame.getAwayPoint();
 
+            if(homePoint == 3 && typeFromUser.equals("1") || homePoint == 1 && typeFromUser.equals("X")
+                    || homePoint == 0 && typeFromUser.equals("2")) {
+                bet.setBetStatus(BetStatus.WIN);
+            } else {
+                bet.setBetStatus(BetStatus.LOSE);
+            }
+
+            betServiceImpl.addBetToDb(bet);
         }
+
         return "test";
     }
-
-
-
-
-
-
 }

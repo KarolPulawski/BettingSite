@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.coderslab.bettingsite.entity.Game;
-import pl.coderslab.bettingsite.service.GameService;
 import pl.coderslab.bettingsite.service.impl.GameServiceImpl;
 
 import java.util.List;

@@ -12,6 +12,7 @@ import pl.coderslab.bettingsite.entity.Bet;
 import pl.coderslab.bettingsite.entity.Game;
 import pl.coderslab.bettingsite.entity.Ticket;
 import pl.coderslab.bettingsite.entity.User;
+import pl.coderslab.bettingsite.model.BetStatus;
 import pl.coderslab.bettingsite.service.UserService;
 import pl.coderslab.bettingsite.service.impl.BetServiceImpl;
 import pl.coderslab.bettingsite.service.impl.GameServiceImpl;
@@ -68,7 +69,7 @@ public class TicketController {
             currentOdd = 1.0;
         }
 
-        Bet bet = new Bet(game, type, currentOdd);
+        Bet bet = new Bet(game, type, currentOdd, BetStatus.ACTIVE);
         try {
             if(!bets.contains(bet)) {
                 bets.add(bet);
