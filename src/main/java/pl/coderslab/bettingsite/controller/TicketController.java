@@ -8,15 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import pl.coderslab.bettingsite.entity.Bet;
-import pl.coderslab.bettingsite.entity.Game;
-import pl.coderslab.bettingsite.entity.Ticket;
-import pl.coderslab.bettingsite.entity.User;
+import pl.coderslab.bettingsite.entity.*;
 import pl.coderslab.bettingsite.model.BetStatus;
 import pl.coderslab.bettingsite.service.UserService;
 import pl.coderslab.bettingsite.service.impl.BetServiceImpl;
 import pl.coderslab.bettingsite.service.impl.GameServiceImpl;
 import pl.coderslab.bettingsite.service.impl.TicketServiceImpl;
+import pl.coderslab.bettingsite.service.impl.WalletServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -39,6 +37,9 @@ public class TicketController {
 
     @Autowired
     private BetServiceImpl betServiceImpl;
+
+    @Autowired
+    private WalletServiceImpl walletServiceImpl;
 
     @PostMapping("/create")
     public String createNewTicket(HttpServletRequest request) {
@@ -111,37 +112,44 @@ public class TicketController {
         Set<Bet> bets = (Set<Bet>) sess.getAttribute("bets");
         double stake = Double.parseDouble(request.getParameter("stake"));
 
-        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        User currentUser = userService.findUserByEmail(userName);
+        Wallet currentWallet = walletServiceImpl.findByCurrentLoggedInUser();
+        if(currentWallet.getBalance().compareTo(new BigDecimal(stake)) >= 0
+                && currentWallet.getBalance().compareTo(new BigDecimal(0.0)) == 1) {
+            String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+            User currentUser = userService.findUserByEmail(userName);
 
-        Boolean active = true;
-        Boolean paid = false;
-        Boolean win = false;
+            Boolean active = true;
+            Boolean paid = false;
+            Boolean win = false;
 
-        Ticket ticket = new Ticket();
-        ticketServiceImpl.addNewTicketToDb(ticket);
-        ticket.setBets(bets);
-        ticket.setUser(currentUser);
-        ticket.setActive(active);
-        ticket.setPaid(paid);
-        ticket.setWin(win);
-        ticket.setStake(new BigDecimal(stake));
-        ticket.setUncheckedCounter(bets.size());
+            Ticket ticket = new Ticket();
+            ticketServiceImpl.addNewTicketToDb(ticket);
+            ticket.setBets(bets);
+            ticket.setUser(currentUser);
+            ticket.setActive(active);
+            ticket.setPaid(paid);
+            ticket.setWin(win);
+            ticket.setStake(new BigDecimal(stake));
+            ticket.setUncheckedCounter(bets.size());
 
-        double totalOdd = 1.0;
+            double totalOdd = 1.0;
 
-        for(Bet b : bets) {
-            b.setTicket(ticket);
-            totalOdd *= b.getOdd();
-            betServiceImpl.addBetToDb(b);
+            for(Bet b : bets) {
+                b.setTicket(ticket);
+                totalOdd *= b.getOdd();
+                betServiceImpl.addBetToDb(b);
+            }
+            ticket.setTotalOdd(new BigDecimal(totalOdd));
+            ticket.setExpectedWin();
+            ticketServiceImpl.addNewTicketToDb(ticket);
+            model.addAttribute("ticket", ticket);
+            return "ticket_display";
+        } else {
+            return "warning_not_enough_money_stake";
         }
-        ticket.setTotalOdd(new BigDecimal(totalOdd));
-        ticket.setExpectedWin();
 
-        ticketServiceImpl.addNewTicketToDb(ticket);
-        model.addAttribute("ticket", ticket);
 
-        return "ticket_display";
+
     }
 
     @RequestMapping("/displayAll")

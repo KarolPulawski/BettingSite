@@ -3,6 +3,7 @@ package pl.coderslab.bettingsite.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import pl.coderslab.bettingsite.entity.User;
 import pl.coderslab.bettingsite.entity.Wallet;
 import pl.coderslab.bettingsite.repository.WalletRepository;
 import pl.coderslab.bettingsite.service.UserService;
@@ -26,8 +27,7 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public boolean depositMoney(BigDecimal depositAmount) {
-        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        Wallet currentWallet = walletRepository.findByUser(userService.findUserByEmail(userName));
+        Wallet currentWallet = findByCurrentLoggedInUser();
         currentWallet.setBalance(currentWallet.getBalance().add(depositAmount));
         saveNewWalletToDb(currentWallet);
         return true;
@@ -35,8 +35,7 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public boolean withdrawMoney(BigDecimal withdrawAmount) {
-        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        Wallet currentWallet = walletRepository.findByUser(userService.findUserByEmail(userName));
+        Wallet currentWallet = findByCurrentLoggedInUser();
         if(currentWallet.getBalance().compareTo(withdrawAmount) >= 0) {
             currentWallet.setBalance(currentWallet.getBalance().subtract(withdrawAmount));
             saveNewWalletToDb(currentWallet);
@@ -44,5 +43,12 @@ public class WalletServiceImpl implements WalletService {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public Wallet findByCurrentLoggedInUser() {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return walletRepository.findByUser(userService.findUserByEmail(userName));
+
     }
 }

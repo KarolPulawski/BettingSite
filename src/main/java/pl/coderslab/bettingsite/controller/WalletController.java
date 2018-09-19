@@ -4,10 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import pl.coderslab.bettingsite.repository.WalletRepository;
 import pl.coderslab.bettingsite.service.impl.WalletServiceImpl;
 
-import javax.persistence.Entity;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 
@@ -38,8 +36,11 @@ public class WalletController {
     @PostMapping("/withdraw")
     public String updateMoneyBalanceWithdraw(HttpServletRequest request) {
         BigDecimal withdrawAmount = new BigDecimal(request.getParameter("withdrawAmount"));
-        walletServiceImpl.withdrawMoney(withdrawAmount);
-        return "redirect:/games/scheduled/display";
+        if(walletServiceImpl.withdrawMoney(withdrawAmount)) {
+            return "redirect:/games/scheduled/display";
+        } else {
+            return "warning_not_enough_money_withdraw";
+        }
     }
 
     @RequestMapping("/panel")
