@@ -9,6 +9,6 @@ import java.math.BigDecimal;
 public interface WalletService {
     void saveNewWalletToDb(Wallet wallet);
 
-    void depositMoney(BigDecimal depositAmount);
-    void withdrawMoney(BigDecimal depositAmount);
+    boolean depositMoney(BigDecimal depositAmount);
+    boolean withdrawMoney(BigDecimal depositAmount);
 }

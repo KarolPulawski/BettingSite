@@ -25,18 +25,24 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public void depositMoney(BigDecimal depositAmount) {
+    public boolean depositMoney(BigDecimal depositAmount) {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         Wallet currentWallet = walletRepository.findByUser(userService.findUserByEmail(userName));
         currentWallet.setBalance(currentWallet.getBalance().add(depositAmount));
         saveNewWalletToDb(currentWallet);
+        return true;
     }
 
     @Override
-    public void withdrawMoney(BigDecimal withdrawAmount) {
+    public boolean withdrawMoney(BigDecimal withdrawAmount) {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         Wallet currentWallet = walletRepository.findByUser(userService.findUserByEmail(userName));
-        currentWallet.setBalance(currentWallet.getBalance().subtract(withdrawAmount));
-        saveNewWalletToDb(currentWallet);
+        if(currentWallet.getBalance().compareTo(withdrawAmount) >= 0) {
+            currentWallet.setBalance(currentWallet.getBalance().subtract(withdrawAmount));
+            saveNewWalletToDb(currentWallet);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
