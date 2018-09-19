@@ -19,6 +19,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -269,5 +270,17 @@ public class HomeController {
         Ticket ticket = ticketServiceImpl.findTicketById(id);
         model.addAttribute("ticket", ticket);
         return "ticket_display";
+    }
+
+    @RequestMapping("/wallet/deposit")
+    public String depositMoney() {
+        return "wallet_deposit";
+    }
+
+    @PostMapping("/wallet/deposit")
+    public String updateMoneyBalance(HttpServletRequest request) {
+        BigDecimal depositAmount = new BigDecimal(request.getParameter("stake"));
+        System.out.println(depositAmount);
+        return "redirect:/games/scheduled/display";
     }
 }

@@ -1,0 +1,22 @@
+<html xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layout_main">
+
+<div layout:fragment="content">
+
+    <p th:text= "'DEPOSIT MONEY'"></p>
+
+    <form action="/wallet/deposit/" method="post">
+        <input type="number" name="stake">
+        <button name="playerId" type="submit">Deposit money</button>
+    </form>
+
+
+
+    <a th:href="@{/games/scheduled/display}">Back to games</a>
+    <a th:href="@{/ticket/displayAll}">Display all tickets</a>
+
+
+</div>
+</html>
+
+<!--<td><a th:href="@{/home/{id}/order(id=${product.id})}">Order</a></td>-->
