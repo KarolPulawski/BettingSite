@@ -11,7 +11,7 @@ import java.util.List;
 public interface TicketService {
     void addNewTicketToDb(Ticket ticket);
 
-    List<Ticket> findTicketsByCurrentUserWinFalseActiveTrue(User user);
+    List<Ticket> findTicketsByCurrentUser(User user);
 
     Ticket findTicketById(int id);
 

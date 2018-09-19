@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Integer> {
-    List<Ticket> findAllByUserAndActiveTrueAndWinFalse(User user);
+    List<Ticket> findAllByUser(User user);
 
     Ticket findOneById(int id);
 

@@ -148,7 +148,7 @@ public class TicketController {
     public String displayCreatedTicket(Model model) {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         User currentUser = userService.findUserByEmail(userName);
-        model.addAttribute("tickets", ticketServiceImpl.findTicketsByCurrentUserWinFalseActiveTrue(currentUser));
+        model.addAttribute("tickets", ticketServiceImpl.findTicketsByCurrentUser(currentUser));
         return "tickets_display";
     }
 

@@ -13,7 +13,6 @@
         <td>active</td>
         <td>paid</td>
         <td>details</td>
-
         </thead>
 
         <tr th:each="ticket: ${tickets}">
@@ -22,7 +21,6 @@
             <td th:text="${ticket.win}"></td>
             <td th:text="${ticket.active}"></td>
             <td th:text="${ticket.paid}"></td>
-
             <td>
                 <form th:action="@{/ticket/display/} + ${ticket.id}" method="post">
                     <button name="playerId" type="submit">Details</button>

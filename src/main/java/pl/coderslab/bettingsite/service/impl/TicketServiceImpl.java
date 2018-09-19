@@ -27,8 +27,8 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public List<Ticket> findTicketsByCurrentUserWinFalseActiveTrue(User user) {
-        return ticketRepository.findAllByUserAndActiveTrueAndWinFalse(user);
+    public List<Ticket> findTicketsByCurrentUser(User user) {
+        return ticketRepository.findAllByUser(user);
     }
 
     @Override
