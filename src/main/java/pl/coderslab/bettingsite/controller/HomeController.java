@@ -1,14 +1,10 @@
 package pl.coderslab.bettingsite.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import pl.coderslab.bettingsite.entity.*;
 import pl.coderslab.bettingsite.model.GameDto;
 import pl.coderslab.bettingsite.model.GameResultDto;
@@ -17,16 +13,11 @@ import pl.coderslab.bettingsite.service.StatisticService;
 import pl.coderslab.bettingsite.service.UserService;
 import pl.coderslab.bettingsite.service.impl.*;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -56,57 +47,14 @@ public class HomeController {
 
     @RequestMapping("/home")
     public String myHome() {
-
         return "game_display";
-
     }
 
     @RequestMapping("/moderator/mypage")
     public String myModeratorPage() {
-
         return "my moderator page";
-
     }
 
-//    @RequestMapping("/get-events")
-//    public String getScheduledEvents(Model model) throws ServletException, IOException {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        String url = "http://localhost:8080/home/gameWeekSchedule";
-//        RestTemplate restTemplate = new RestTemplate();
-//        ResponseEntity<GameDto[]> responseGames = restTemplate.getForEntity(
-//                url, GameDto[].class);
-//        GameDto[] games = responseGames.getBody();
-//        for (GameDto game : games) {
-////            logger.info("countries {}", country);
-//            System.out.println(game.getGameId() + ") " + game.getTeamHome() + " : " + game.getTeamAway() + " | "
-//                    + game.getStarted() + " | " + game.getHomeOdd() + " - " + game.getDrawOdd() + " - "
-//                    + game.getAwayOdd());
-//        }
-//        System.out.println("**** size games: " + games.length + "******");
-//        model.addAttribute("games", games);
-//
-//        return "game_display";
-//    }
-
-//    @RequestMapping("/get-results")
-//    public String getResults(Model model) throws ServletException, IOException {
-//        String url = "http://localhost:8080/home/gameWeekResults";
-//        RestTemplate restTemplate = new RestTemplate();
-//        ResponseEntity<GameResultDto[]> responseGames = restTemplate.getForEntity(
-//                url, GameResultDto[].class);
-//        GameResultDto[] games = responseGames.getBody();
-//        for (GameResultDto game : games) {
-////            logger.info("countries {}", country);
-//            System.out.println(game.getGameId() + ") " + game.getTeamHome() + " " + game.getHomeGoal() + ":"
-//                    + game.getAwayGoal() + " " + game.getTeamAway() + " | "
-//                    + game.getStarted() + " | " + game.getHomeOdd() + " - " + game.getDrawOdd() + " - "
-//                    + game.getAwayOdd()
-//                    + " yellow: " + game.getHomeYellow() + "|" + game.getAwayYellow());
-//        }
-//        System.out.println("**** size games: " + games.length + "******");
-//        model.addAttribute("games", games);
-//        return "game_results_display";
-//    }
 
     @PostMapping("/api/game")
     public String receiveInfoFromApi(@RequestBody GameDto gameDto) throws ParseException {
@@ -124,7 +72,6 @@ public class HomeController {
         newGame.setHistory(gameDto.isHistory());
         newGame.setScheduled(gameDto.getScheduled());
         newGame.setFinished(gameDto.getFinished());
-        System.out.println("ACTIVE: " + gameDto.isActive());
 
         Odd odd = new Odd();
         odd.setAwayOdd(gameDto.getAwayOdd());
@@ -135,8 +82,7 @@ public class HomeController {
 
         oddServiceImpl.addNewOdd(odd);
         newGame.setOdd(odd);
-        
-        // save to db new games
+
         gameServiceImpl.saveGameToDb(newGame);
         return "test";
     }
@@ -145,13 +91,10 @@ public class HomeController {
     public String receiveResultApi(@RequestBody GameResultDto gameResultDto) throws ParseException {
 
         Team teamHome = teamServiceImpl.loadTeamByName(gameResultDto.getTeamHome());
-        System.out.println("name from dto: " + gameResultDto.getTeamHome());
 
         Timestamp timestampToCheck = DateService.timestampFromString(gameResultDto.getStarted());
-        System.out.println("TIMESTAMP: " + timestampToCheck.toString());
 
         Game currentGame = gameServiceImpl.findGameByTeamHomeAndStarted(teamHome, timestampToCheck);
-        System.out.println("name from db: " + currentGame.getTeamHome().getName());
 
         currentGame.setActive(gameResultDto.isActive());
         currentGame.setHistory(gameResultDto.isHistory());
@@ -166,6 +109,19 @@ public class HomeController {
         currentGame.setHomeRed(gameResultDto.getHomeRed());
         currentGame.setAwayRed(gameResultDto.getAwayRed());
         gameServiceImpl.saveGameToDb(currentGame);
+
+        List<Bet> bets = currentGame.getBets();
+        for(Bet bet : bets) {
+            Ticket ticketToCheck = bet.getTicket();
+
+            String typeFromUser = bet.getType();
+
+            int homePoint = currentGame.getHomePoint();
+            int awayPoint = currentGame.getAwayPoint();
+
+
+
+        }
         return "test";
     }
 
@@ -273,7 +229,6 @@ public class HomeController {
         ticket.setPaid(paid);
         ticket.setWin(win);
         ticket.setStake(new BigDecimal(stake));
-
 
         double totalOdd = 1.0;
 

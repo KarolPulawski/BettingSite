@@ -13,8 +13,6 @@ import pl.coderslab.bettingsite.entity.User;
 import pl.coderslab.bettingsite.service.UserService;
 
 import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.Set;
 
 @Controller
 public class LoginController {
@@ -34,17 +32,9 @@ public class LoginController {
     }
 
     @RequestMapping(value="/registration", method = RequestMethod.GET)
-//    public ModelAndView registration(){
     public ModelAndView registration(){
         ModelAndView modelAndView = new ModelAndView();
         User user = new User();
-//        Role role = new Role();
-//        role.setId(2);
-//        role.setRole("USER");
-//        Set<Role> roles = new HashSet<>();
-//        roles.add(role);
-//        user.setRoles(roles);
-
         modelAndView.addObject("user", user);
         modelAndView.setViewName("registration");
         return modelAndView;
@@ -84,7 +74,6 @@ public class LoginController {
     @RequestMapping(method = RequestMethod.GET, value = "/user/login")
     public String loginUserHome() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        User user = userService.findUserByEmail(auth.getName());
         return "game_display";
     }
 }
