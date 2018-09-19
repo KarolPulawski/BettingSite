@@ -123,7 +123,7 @@ public class TicketController {
             Boolean win = false;
 
             Ticket ticket = new Ticket();
-            ticketServiceImpl.addNewTicketToDb(ticket);
+            ticketServiceImpl.addTicketToDb(ticket);
             ticket.setBets(bets);
             ticket.setUser(currentUser);
             ticket.setActive(active);
@@ -141,7 +141,7 @@ public class TicketController {
             }
             ticket.setTotalOdd(new BigDecimal(totalOdd));
             ticket.setExpectedWin();
-            ticketServiceImpl.addNewTicketToDb(ticket);
+            ticketServiceImpl.addTicketToDb(ticket);
             model.addAttribute("ticket", ticket);
             return "ticket_display";
         } else {

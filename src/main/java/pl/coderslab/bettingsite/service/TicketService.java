@@ -9,11 +9,12 @@ import java.util.List;
 
 @Service
 public interface TicketService {
-    void addNewTicketToDb(Ticket ticket);
+    void addTicketToDb(Ticket ticket);
 
     List<Ticket> findTicketsByCurrentUser(User user);
 
     Ticket findTicketById(int id);
 
     List<Ticket> findAllTicketByUncheckedCounterZero();
+    List<Ticket> findAllTicketByWinTrueAndPaidFalse();
 }

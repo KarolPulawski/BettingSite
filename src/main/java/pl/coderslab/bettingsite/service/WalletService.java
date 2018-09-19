@@ -13,5 +13,6 @@ public interface WalletService {
     Wallet findByCurrentLoggedInUser();
 
     boolean depositMoney(BigDecimal depositAmount);
-    boolean withdrawMoney(BigDecimal depositAmount);
+    boolean withdrawMoney(BigDecimal withdrawAmount);
+//    boolean depositMoneyWin(BigDecimal depositAmountWin);
 }

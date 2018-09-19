@@ -16,4 +16,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 
     @Query("SELECT t FROM Ticket t WHERE t.uncheckedCounter = 0 AND t.active = true")
     List<Ticket> findAllByUncheckedCounterZeroAndActiveTrue();
+
+    List<Ticket> findAllByWinTrue();
 }

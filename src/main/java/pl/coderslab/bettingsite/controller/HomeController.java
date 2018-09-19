@@ -1,9 +1,7 @@
 package pl.coderslab.bettingsite.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.bettingsite.entity.*;
 import pl.coderslab.bettingsite.model.BetStatus;
@@ -14,9 +12,6 @@ import pl.coderslab.bettingsite.service.StatisticService;
 import pl.coderslab.bettingsite.service.UserService;
 import pl.coderslab.bettingsite.service.impl.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.*;
@@ -127,7 +122,7 @@ public class HomeController {
             }
             ticketServiceImpl.deincrementUncheckedCounter(ticketToCheck);
             betServiceImpl.addBetToDb(bet);
-            ticketServiceImpl.addNewTicketToDb(ticketToCheck);
+            ticketServiceImpl.addTicketToDb(ticketToCheck);
         }
         return "test";
     }

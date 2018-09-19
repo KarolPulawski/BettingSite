@@ -6,11 +6,14 @@ import org.springframework.stereotype.Service;
 import pl.coderslab.bettingsite.entity.Bet;
 import pl.coderslab.bettingsite.entity.Ticket;
 import pl.coderslab.bettingsite.entity.User;
+import pl.coderslab.bettingsite.entity.Wallet;
 import pl.coderslab.bettingsite.model.BetStatus;
 import pl.coderslab.bettingsite.repository.BetRepository;
 import pl.coderslab.bettingsite.repository.TicketRepository;
+import pl.coderslab.bettingsite.repository.WalletRepository;
 import pl.coderslab.bettingsite.service.TicketService;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -21,8 +24,14 @@ public class TicketServiceImpl implements TicketService {
     @Autowired
     private BetRepository betRepository;
 
+    @Autowired
+    private WalletServiceImpl walletServiceImpl;
+
+    @Autowired
+    private WalletRepository walletRepository;
+
     @Override
-    public void addNewTicketToDb(Ticket ticket) {
+    public void addTicketToDb(Ticket ticket) {
         ticketRepository.save(ticket);
     }
 
@@ -45,9 +54,13 @@ public class TicketServiceImpl implements TicketService {
         return ticketRepository.findAllByUncheckedCounterZeroAndActiveTrue();
     }
 
+    @Override
+    public List<Ticket> findAllTicketByWinTrueAndPaidFalse() {
+        return ticketRepository.findAllByWinTrue();
+    }
+
     @Scheduled(fixedDelay = 5_000L)
     public void checkIfTicketIsWin() {
-        System.out.println("CHECKING TICKET");
         List<Ticket> ticketsToCheck = findAllTicketByUncheckedCounterZero();
         int counterWin = 0;
         for(Ticket ticket : ticketsToCheck) {
@@ -61,7 +74,19 @@ public class TicketServiceImpl implements TicketService {
             if(counterWin == bets.size()) {
                 ticket.setWin(true);
             }
-            addNewTicketToDb(ticket);
+            addTicketToDb(ticket);
+        }
+    }
+
+    @Scheduled(fixedDelay = 10_000L)
+    public void paidIfTicketIsWin() {
+        List<Ticket> ticketsToCheckPaid = findAllTicketByWinTrueAndPaidFalse();
+        for(Ticket ticket : ticketsToCheckPaid) {
+            BigDecimal amountToPaid = ticket.getExpectedWin();
+            Wallet currentWallet = ticket.getUser().getWallet();
+            currentWallet.setBalance(currentWallet.getBalance().add(amountToPaid));
+            ticket.setPaid(true);
+            addTicketToDb(ticket);
         }
     }
 }
