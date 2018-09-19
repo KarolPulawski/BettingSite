@@ -1,8 +1,11 @@
 package pl.coderslab.bettingsite.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import pl.coderslab.bettingsite.repository.WalletRepository;
+import pl.coderslab.bettingsite.service.impl.WalletServiceImpl;
 
 import javax.persistence.Entity;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +15,9 @@ import java.math.BigDecimal;
 @RequestMapping("/wallet")
 public class WalletController {
 
+    @Autowired
+    private WalletServiceImpl walletServiceImpl;
+
     @RequestMapping("/deposit")
     public String depositMoney() {
         return "wallet_deposit";
@@ -20,7 +26,7 @@ public class WalletController {
     @PostMapping("/deposit")
     public String updateMoneyBalanceDeposit(HttpServletRequest request) {
         BigDecimal depositAmount = new BigDecimal(request.getParameter("depositAmount"));
-        System.out.println(depositAmount);
+        walletServiceImpl.depositMoney(depositAmount);
         return "redirect:/games/scheduled/display";
     }
 
@@ -31,8 +37,8 @@ public class WalletController {
 
     @PostMapping("/withdraw")
     public String updateMoneyBalanceWithdraw(HttpServletRequest request) {
-        BigDecimal depositAmount = new BigDecimal(request.getParameter("withdrawAmount"));
-        System.out.println(depositAmount);
+        BigDecimal withdrawAmount = new BigDecimal(request.getParameter("withdrawAmount"));
+        walletServiceImpl.withdrawMoney(withdrawAmount);
         return "redirect:/games/scheduled/display";
     }
 
