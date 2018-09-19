@@ -226,15 +226,17 @@ public class HomeController {
     public String deleteBetFromTicket(Model model, @PathVariable String game_id, HttpServletRequest request) {
         HttpSession sess = request.getSession();
         Set<Bet> bets = (Set<Bet>) sess.getAttribute("bets");
-        Bet bet = betServiceImpl.finBetByGameId(Integer.parseInt(game_id));
-
         double totalOdd = (double) sess.getAttribute("totalOdd");
-        totalOdd /= bet.getOdd();
-        totalOdd = Math.round(totalOdd * 100)/100.0;
-        if(bets.contains(bet)) {
-            bets.remove(bet);
+        Bet betToDelete = null;
+        for(Bet b : bets) {
+            if(b.getGame().getId() == Integer.parseInt(game_id)) {
+                betToDelete = b;
+                break;
+            }
         }
-
+        totalOdd /= betToDelete.getOdd();
+        totalOdd = Math.round(totalOdd * 100)/100.0;
+        bets.remove(betToDelete);
         sess.setAttribute("bets", bets);
         sess.setAttribute("totalOdd", totalOdd);
         return "redirect:/games/scheduled/display";
