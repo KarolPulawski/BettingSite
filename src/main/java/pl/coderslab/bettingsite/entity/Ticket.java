@@ -54,6 +54,12 @@ public class Ticket {
     public void setBets(List<Bet> bets) {
         this.bets = bets;
     }
+    public void setBets(Set<Bet> bets) {
+        this.bets = new ArrayList<>();
+        for(Bet bet : bets) {
+            this.bets.add(bet);
+        }
+    }
 
     public User getUser() {
         return user;

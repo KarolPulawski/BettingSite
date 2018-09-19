@@ -61,6 +61,14 @@ public class Bet {
         this.odd = odd;
     }
 
+    public Ticket getTicket() {
+        return ticket;
+    }
+
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
+    }
+
     @Override
     public boolean equals(Object o) {
 

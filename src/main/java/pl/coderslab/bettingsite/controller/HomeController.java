@@ -194,7 +194,7 @@ public class HomeController {
         double totalOdd = (double)sess.getAttribute("totalOdd");
         Game game = gameServiceImpl.findGameById(Integer.parseInt(game_id));
 
-        double currentOdd = 0.0;
+        double currentOdd;
 
         if(type.equals("1")) {
             currentOdd = game.getOdd().getHomeOdd();
@@ -217,12 +217,8 @@ public class HomeController {
             System.out.println("BET IS ALREADY EXIST");
         }
         totalOdd = Math.round(totalOdd * 100)/100.0;
-//        DecimalFormat df = new DecimalFormat("0.00");
-//        totalOdd = Double.parseDouble(df.format(totalOdd));
         sess.setAttribute("bets", bets);
         sess.setAttribute("totalOdd", totalOdd);
-
-
         return "redirect:/games/scheduled/display";
     }
 
@@ -241,14 +237,18 @@ public class HomeController {
         Boolean paid = false;
         Boolean win = false;
 
-        Ticket ticket = new Ticket(bets, currentUser, active, paid, win, stake);
-
-        double totalOdd = 1.0;
+        Ticket ticket = new Ticket();
+        ticketServiceImpl.addNewTicketToDb(ticket);
+        ticket.setBets(bets);
+        ticket.setUser(currentUser);
+        ticket.setActive(active);
+        ticket.setPaid(paid);
+        ticket.setWin(win);
+        ticket.setStake(stake);
         for(Bet b : bets) {
-            totalOdd *= b.getOdd();
+            b.setTicket(ticket);
             betServiceImpl.addBetToDb(b);
         }
-        ticketServiceImpl.addNewTicketToDb(ticket);
         model.addAttribute("ticket", ticket);
         Set<Bet> clearSession = new HashSet<>();
         sess.setAttribute("bets", clearSession);
