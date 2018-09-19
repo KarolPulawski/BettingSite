@@ -8,6 +8,7 @@ import pl.coderslab.bettingsite.entity.User;
 import pl.coderslab.bettingsite.entity.Wallet;
 import pl.coderslab.bettingsite.repository.RoleRepository;
 import pl.coderslab.bettingsite.repository.UserRepository;
+import pl.coderslab.bettingsite.repository.WalletRepository;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -18,14 +19,17 @@ public class UserService {
 
     private UserRepository userRepository;
     private RoleRepository roleRepository;
+    private WalletRepository walletRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository,
                        RoleRepository roleRepository,
-                       BCryptPasswordEncoder bCryptPasswordEncoder) {
+                       BCryptPasswordEncoder bCryptPasswordEncoder,
+                       WalletRepository walletRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.walletRepository = walletRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
@@ -37,7 +41,9 @@ public class UserService {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setActive(1);
         BigDecimal zeroBalance = new BigDecimal(0);
-        user.setWallet(new Wallet(zeroBalance, user));
+        Wallet wallet = new Wallet(zeroBalance, user);
+//        walletRepository.save(wallet);
+        user.setWallet(wallet);
         Role userRole = roleRepository.findByRole("USER");
         user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
         userRepository.save(user);
