@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import pl.coderslab.bettingsite.entity.Game;
 import pl.coderslab.bettingsite.entity.Team;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Controller
@@ -31,6 +32,6 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
 
     Game findFirstByTeamHome(Team teamHome);
 
-    Game findFirstByTeamHomeAndActiveFalseAndHistoryFalse(Team teamHome);
+    Game findFirstByTeamHomeAndStarted(Team teamHome, Timestamp started);
 
 }

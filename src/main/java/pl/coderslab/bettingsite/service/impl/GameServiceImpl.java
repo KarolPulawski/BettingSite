@@ -7,6 +7,7 @@ import pl.coderslab.bettingsite.entity.Team;
 import pl.coderslab.bettingsite.repository.GameRepository;
 import pl.coderslab.bettingsite.service.GameService;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -62,9 +63,10 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Game findFirstScheduleByTeam(Team teamHome) {
-        return gameRepository.findFirstByTeamHomeAndActiveFalseAndHistoryFalse(teamHome);
+    public Game findGameByTeamHomeAndStarted(Team teamHome, Timestamp started) {
+        return gameRepository.findFirstByTeamHomeAndStarted(teamHome, started);
     }
+
 
     @Override
     public Game findGameById(int id) {

@@ -3,6 +3,8 @@ package pl.coderslab.bettingsite.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.sql.Timestamp;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GameDto {
     @JsonProperty("gameId")
@@ -60,6 +62,14 @@ public class GameDto {
 
     public void setStarted(String started) {
         this.started = started;
+    }
+
+    public boolean isScheduled() {
+        return scheduled;
+    }
+
+    public boolean isFinished() {
+        return finished;
     }
 
     public boolean isActive() {

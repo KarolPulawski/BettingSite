@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import pl.coderslab.bettingsite.entity.*;
 import pl.coderslab.bettingsite.model.GameDto;
 import pl.coderslab.bettingsite.model.GameResultDto;
+import pl.coderslab.bettingsite.service.DateService;
 import pl.coderslab.bettingsite.service.StatisticService;
 import pl.coderslab.bettingsite.service.UserService;
 import pl.coderslab.bettingsite.service.impl.*;
@@ -21,7 +22,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -104,7 +109,7 @@ public class HomeController {
 //    }
 
     @PostMapping("/api/game")
-    public String receiveInfoFromApi(@RequestBody GameDto gameDto) {
+    public String receiveInfoFromApi(@RequestBody GameDto gameDto) throws ParseException {
 
         Game newGame = new Game();
 
@@ -112,6 +117,8 @@ public class HomeController {
         Team teamAway = teamServiceImpl.loadTeamByName(gameDto.getTeamAway());
         newGame.setTeamHome(teamHome);
         newGame.setTeamAway(teamAway);
+
+        newGame.setStarted(DateService.timestampFromString(gameDto.getStarted()));
 
         newGame.setActive(gameDto.isActive());
         newGame.setHistory(gameDto.isHistory());
@@ -128,19 +135,22 @@ public class HomeController {
 
         oddServiceImpl.addNewOdd(odd);
         newGame.setOdd(odd);
-
+        
         // save to db new games
         gameServiceImpl.saveGameToDb(newGame);
         return "test";
     }
 
     @PostMapping("/api/result")
-    public String receiveResultApi(@RequestBody GameResultDto gameResultDto) {
+    public String receiveResultApi(@RequestBody GameResultDto gameResultDto) throws ParseException {
 
         Team teamHome = teamServiceImpl.loadTeamByName(gameResultDto.getTeamHome());
         System.out.println("name from dto: " + gameResultDto.getTeamHome());
 
-        Game currentGame = gameServiceImpl.findFirstScheduleByTeam(teamHome);
+        Timestamp timestampToCheck = DateService.timestampFromString(gameResultDto.getStarted());
+        System.out.println("TIMESTAMP: " + timestampToCheck.toString());
+
+        Game currentGame = gameServiceImpl.findGameByTeamHomeAndStarted(teamHome, timestampToCheck);
         System.out.println("name from db: " + currentGame.getTeamHome().getName());
 
         currentGame.setActive(gameResultDto.isActive());

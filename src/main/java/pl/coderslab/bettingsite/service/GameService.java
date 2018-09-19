@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import pl.coderslab.bettingsite.entity.Game;
 import pl.coderslab.bettingsite.entity.Team;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -24,7 +25,7 @@ public interface GameService {
 
     Game findFirstByTeamHome(Team teamHome);
 
-    Game findFirstScheduleByTeam(Team teamHome);
+    Game findGameByTeamHomeAndStarted(Team teamHome, Timestamp started);
 
     Game findGameById(int id);
 }
