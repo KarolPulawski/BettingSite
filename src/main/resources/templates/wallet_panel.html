@@ -1,0 +1,15 @@
+<html xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layout_main">
+
+<div layout:fragment="content">
+
+    <p th:text= "'WALLET PANEL'"></p>
+
+    <a th:href="@{/wallet/deposit}">WALLET DEPOSIT</a>
+    <a th:href="@{/wallet/withdraw}">WALLET WITHDRAW</a>
+
+
+</div>
+</html>
+
+<!--<td><a th:href="@{/home/{id}/order(id=${product.id})}">Order</a></td>-->

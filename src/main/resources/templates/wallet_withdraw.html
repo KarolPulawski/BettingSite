@@ -3,10 +3,10 @@
 
 <div layout:fragment="content">
 
-    <p th:text= "'DEPOSIT MONEY'"></p>
+    <p th:text= "'WITHDRAW MONEY'"></p>
 
-    <form action="/wallet/deposit" method="post">
-        <input type="number" name="depositAmount">
+    <form action="/wallet/withdraw" method="post">
+        <input type="number" name="withdrawAmount">
         <button name="playerId" type="submit">Deposit money</button>
     </form>
 

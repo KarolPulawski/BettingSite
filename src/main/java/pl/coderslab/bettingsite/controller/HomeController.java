@@ -278,9 +278,26 @@ public class HomeController {
     }
 
     @PostMapping("/wallet/deposit")
-    public String updateMoneyBalance(HttpServletRequest request) {
-        BigDecimal depositAmount = new BigDecimal(request.getParameter("stake"));
+    public String updateMoneyBalanceDeposit(HttpServletRequest request) {
+        BigDecimal depositAmount = new BigDecimal(request.getParameter("depositAmount"));
         System.out.println(depositAmount);
         return "redirect:/games/scheduled/display";
+    }
+
+    @RequestMapping("/wallet/withdraw")
+    public String withdrawMoney() {
+        return "wallet_withdraw";
+    }
+
+    @PostMapping("/wallet/withdraw")
+    public String updateMoneyBalanceWithdraw(HttpServletRequest request) {
+        BigDecimal depositAmount = new BigDecimal(request.getParameter("withdrawAmount"));
+        System.out.println(depositAmount);
+        return "redirect:/games/scheduled/display";
+    }
+
+    @RequestMapping("/wallet")
+    public String walletPanel() {
+        return "wallet_panel";
     }
 }

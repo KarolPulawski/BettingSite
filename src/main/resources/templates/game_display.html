@@ -60,6 +60,7 @@
         <td>away team</td>
         <td>type</td>
         <td>odd</td>
+        <td>delete from ticket</td>
 
         </thead>
 
@@ -69,6 +70,9 @@
             <td th:text="${bet.game.teamAway.name}"></td>
             <td th:text="${bet.type}"></td>
             <td th:text="${bet.odd}"></td>
+
+            //BUTTON TO DELETE
+            send bet id to controller action which get bets from session and delete specially bet id
 
         </tr>
     </table>
@@ -85,6 +89,8 @@
     </form>
 
     <a th:href="@{/ticket/displayAll}">DISPLAY ALL TICKETS</a>
+    </br>
+    <a th:href="@{/wallet}">WALLET PANEL</a>
 </div>
 </html>
 
