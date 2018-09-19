@@ -1,6 +1,8 @@
 package pl.coderslab.bettingsite.entity;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +24,9 @@ public class Ticket {
     private Boolean paid;
     private Boolean win;
 
-    private double stake;
+    private BigDecimal stake;
+    private BigDecimal totalOdd;
+    private BigDecimal expectedWin;
 
     public Ticket() {
     }
@@ -36,7 +40,7 @@ public class Ticket {
         this.active = active;
         this.paid = paid;
         this.win = win;
-        this.stake = stake;
+        this.stake = new BigDecimal(stake);
     }
 
     public Integer getId() {
@@ -69,12 +73,8 @@ public class Ticket {
         this.user = user;
     }
 
-    public double getStake() {
-        return stake;
-    }
-
-    public void setStake(double stake) {
-        this.stake = stake;
+    public BigDecimal getStake() {
+        return this.stake;
     }
 
     public Boolean getActive() {
@@ -100,4 +100,25 @@ public class Ticket {
     public void setWin(Boolean win) {
         this.win = win;
     }
+
+    public void setStake(BigDecimal stake) {
+        this.stake = stake;
+    }
+
+    public BigDecimal getTotalOdd() {
+        return totalOdd.setScale(2, RoundingMode.HALF_DOWN);
+    }
+
+    public void setTotalOdd(BigDecimal totalOdd) {
+        this.totalOdd = totalOdd;
+    }
+
+    public BigDecimal getExpectedWin() {
+        return this.expectedWin.setScale(2, RoundingMode.HALF_DOWN);
+    }
+
+    public void setExpectedWin() {
+        this.expectedWin = this.totalOdd.multiply(this.stake);
+    }
+
 }

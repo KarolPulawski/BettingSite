@@ -255,11 +255,9 @@ public class HomeController {
     @PostMapping("/ticket/submit")
     public String submitTicket(HttpServletRequest request, Model model) {
         HttpSession sess = request.getSession();
-        //download session -> bets
         Set<Bet> bets = (Set<Bet>) sess.getAttribute("bets");
         double stake = Double.parseDouble(request.getParameter("stake"));
 
-        // create ticket
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         User currentUser = userService.findUserByEmail(userName);
 
@@ -274,15 +272,22 @@ public class HomeController {
         ticket.setActive(active);
         ticket.setPaid(paid);
         ticket.setWin(win);
-        ticket.setStake(stake);
+        ticket.setStake(new BigDecimal(stake));
+
+
+        double totalOdd = 1.0;
+
         for(Bet b : bets) {
             b.setTicket(ticket);
+            totalOdd *= b.getOdd();
             betServiceImpl.addBetToDb(b);
         }
+        ticket.setTotalOdd(new BigDecimal(totalOdd));
+        ticket.setExpectedWin();
+
+        ticketServiceImpl.addNewTicketToDb(ticket);
         model.addAttribute("ticket", ticket);
-        Set<Bet> clearSession = new HashSet<>();
-        sess.setAttribute("bets", clearSession);
-//        return "redirect:/games/scheduled/display";
+
         return "ticket_display";
     }
 
