@@ -14,4 +14,6 @@ public interface TicketService {
     List<Ticket> findTicketsByCurrentUserWinFalseActiveTrue(User user);
 
     Ticket findTicketById(int id);
+
+    List<Ticket> findAllTicketByUncheckedCounterZero();
 }

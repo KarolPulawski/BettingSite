@@ -6,6 +6,8 @@ import pl.coderslab.bettingsite.entity.Bet;
 import pl.coderslab.bettingsite.repository.BetRepository;
 import pl.coderslab.bettingsite.service.BetService;
 
+import java.util.List;
+
 @Service
 public class BetServiceImpl implements BetService {
 
@@ -25,5 +27,10 @@ public class BetServiceImpl implements BetService {
     @Override
     public Bet finBetByGameId(int game_id) {
         return betRepository.findByGameId(game_id);
+    }
+
+    @Override
+    public List<Bet> findALlByTicketId(int ticketId) {
+        return betRepository.findAllByTicketId(ticketId);
     }
 }

@@ -126,6 +126,7 @@ public class TicketController {
         ticket.setPaid(paid);
         ticket.setWin(win);
         ticket.setStake(new BigDecimal(stake));
+        ticket.setUncheckedCounter(bets.size());
 
         double totalOdd = 1.0;
 

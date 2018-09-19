@@ -125,10 +125,10 @@ public class HomeController {
             } else {
                 bet.setBetStatus(BetStatus.LOSE);
             }
-
+            ticketServiceImpl.deincrementUncheckedCounter(ticketToCheck);
             betServiceImpl.addBetToDb(bet);
+            ticketServiceImpl.addNewTicketToDb(ticketToCheck);
         }
-
         return "test";
     }
 }

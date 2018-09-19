@@ -14,7 +14,7 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToMany(mappedBy = "ticket")
+    @OneToMany(mappedBy = "ticket", fetch = FetchType.EAGER)
     private List<Bet> bets;
 
     @OneToOne
@@ -43,7 +43,6 @@ public class Ticket {
         this.paid = paid;
         this.win = win;
         this.stake = new BigDecimal(stake);
-        this.uncheckedCounter = bets.size();
     }
 
     public Integer getId() {
@@ -126,5 +125,9 @@ public class Ticket {
 
     public Integer getUncheckedCounter() {
         return uncheckedCounter;
+    }
+
+    public void setUncheckedCounter(Integer uncheckedCounter) {
+        this.uncheckedCounter = uncheckedCounter;
     }
 }
