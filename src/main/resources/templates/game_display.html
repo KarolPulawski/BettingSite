@@ -70,23 +70,31 @@
             <td th:text="${bet.game.teamAway.name}"></td>
             <td th:text="${bet.type}"></td>
             <td th:text="${bet.odd}"></td>
-
-            //BUTTON TO DELETE
-            send bet id to controller action which get bets from session and delete specially bet id
+            <td>
+                <form th:action="@{/ticket/delete/} + ${bet.id}" method="post">
+                    <button name="playerId" type="submit">X</button>
+                </form>
+            </td>
 
         </tr>
     </table>
 
     <p th:text="'Total odd: ' + ${session.totalOdd}"></p>
 
-    <!--<input type = "number" name ="a_number" placeholder="a parameter">-->
-    <!--<input type = "number" name ="b_number" placeholder="b parameter">-->
-    <!--<input type = "number" name ="c_number" placeholder="c parameter">-->
+    <div th:if="${not #lists.isEmpty(session.bets)}">
 
-    <form action="/ticket/submit" method="post">
-        <input type="number" name="stake">
-        <button name="playerId" type="submit">Submit ticket</button>
-    </form>
+        <form action="/ticket/submit" method="post">
+            <input type="number" name="stake">
+            <button name="playerId" type="submit">Submit ticket</button>
+        </form>
+
+    </div>
+
+
+    <!--<form action="/ticket/submit" method="post">-->
+        <!--<input type="number" name="stake">-->
+        <!--<button name="playerId" type="submit">Submit ticket</button>-->
+    <!--</form>-->
 
     <a th:href="@{/ticket/displayAll}">DISPLAY ALL TICKETS</a>
     </br>
