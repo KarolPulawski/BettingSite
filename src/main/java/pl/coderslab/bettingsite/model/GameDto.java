@@ -20,6 +20,12 @@ public class GameDto {
     @JsonProperty("active")
     private boolean active;
 
+    @JsonProperty("scheduled")
+    private boolean scheduled;
+
+    @JsonProperty("finished")
+    private boolean finished;
+
     @JsonProperty("history")
     private boolean history;
 
@@ -102,5 +108,21 @@ public class GameDto {
 
     public void setGameId(String gameId) {
         this.gameId = gameId;
+    }
+
+    public boolean getScheduled() {
+        return scheduled;
+    }
+
+    public void setScheduled(boolean scheduled) {
+        this.scheduled = scheduled;
+    }
+
+    public boolean getFinished() {
+        return finished;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
     }
 }

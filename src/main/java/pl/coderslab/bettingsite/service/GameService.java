@@ -13,6 +13,7 @@ public interface GameService {
     List<Game> getAllActiveGame();
 
     List<Game> getAllScheduledGames();
+    List<Game> getAllFinishedGames();
 
     List<Game> totalPointsLastFiveMatches(int teamId);
 

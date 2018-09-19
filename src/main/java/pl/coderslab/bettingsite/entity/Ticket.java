@@ -12,7 +12,7 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToMany
+    @OneToMany(mappedBy = "ticket")
     private List<Bet> bets;
 
     @OneToOne

@@ -27,7 +27,12 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public List<Game> getAllScheduledGames() {
-        return gameRepository.findAllByActiveFalseAndHistoryFalse();
+        return gameRepository.findAllByScheduledTrueAndFinishedFalse();
+    }
+
+    @Override
+    public List<Game> getAllFinishedGames() {
+        return gameRepository.findAllByFinishedTrueAndActiveFalse();
     }
 
 

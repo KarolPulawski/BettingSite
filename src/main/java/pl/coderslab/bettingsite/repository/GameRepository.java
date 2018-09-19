@@ -10,7 +10,8 @@ import java.util.List;
 
 @Controller
 public interface GameRepository extends JpaRepository<Game, Integer> {
-    List<Game> findAllByActiveFalseAndHistoryFalse();
+    List<Game> findAllByScheduledTrueAndFinishedFalse();
+    List<Game> findAllByFinishedTrueAndActiveFalse();
     List<Game> findAllByActiveTrueAndHistoryFalse();
 
 

@@ -10,12 +10,15 @@ public class Bet {
     @GeneratedValue
     private Integer id;
 
-    @OneToOne
+    @ManyToOne
     private Game game;
 
     private String type;
 
     private double odd;
+
+    @ManyToOne
+    private Ticket ticket;
 
     public Bet() {
     }

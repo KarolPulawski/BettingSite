@@ -2,6 +2,7 @@ package pl.coderslab.bettingsite.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "games")
@@ -26,6 +27,8 @@ public class Game {
 
     private Boolean active;
     private Boolean history;
+    private Boolean finished;
+    private Boolean scheduled;
 
     private int homeGoal;
     private int homeCorner;
@@ -39,6 +42,9 @@ public class Game {
     private int awayRed;
     private int awayPenalty;
     private int awayPoint;
+
+    @OneToMany(mappedBy = "game")
+    private List<Bet> bets;
 
     public Game() {
     }
@@ -201,6 +207,30 @@ public class Game {
 
     public void setAwayPoint(int awayPoint) {
         this.awayPoint = awayPoint;
+    }
+
+    public List<Bet> getBets() {
+        return bets;
+    }
+
+    public void setBets(List<Bet> bets) {
+        this.bets = bets;
+    }
+
+    public Boolean getFinished() {
+        return finished;
+    }
+
+    public void setFinished(Boolean finished) {
+        this.finished = finished;
+    }
+
+    public Boolean getScheduled() {
+        return scheduled;
+    }
+
+    public void setScheduled(Boolean scheduled) {
+        this.scheduled = scheduled;
     }
 }
 

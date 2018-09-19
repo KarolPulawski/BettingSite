@@ -101,88 +101,63 @@ public class HomeController {
 //        return "game_results_display";
 //    }
 
-//    @PostMapping("/api/game")
-//    public String receiveInfoFromApi(@RequestBody GameDto gameDto) {
-//
-//        Game newGame = new Game();
-//
-//        Team teamHome = teamServiceImpl.loadTeamByName(gameDto.getTeamHome());
-//        Team teamAway = teamServiceImpl.loadTeamByName(gameDto.getTeamAway());
-//        newGame.setTeamHome(teamHome);
-//        newGame.setTeamAway(teamAway);
-//
-//        newGame.setActive(gameDto.isActive());
-//        newGame.setHistory(gameDto.isHistory());
-//        System.out.println("ACTIVE: " + gameDto.isActive());
-//
-//        Odd odd = new Odd();
-//        odd.setAwayOdd(gameDto.getAwayOdd());
-//        odd.setDrawOdd(gameDto.getDrawOdd());
-//        odd.setHomeOdd(gameDto.getHomeOdd());
-//
-//        odd = statisticService.generateOdd(newGame);
-//
-//        oddServiceImpl.addNewOdd(odd);
-//        newGame.setOdd(odd);
-//
-////        System.out.print("****** scheduled");
-////        System.out.print(newGame.getTeamHome().getName());
-////        System.out.print(" | ");
-////        System.out.print(newGame.getTeamAway().getName());
-////        System.out.print(" | ");
-////        System.out.print(newGame.getActive());
-////        System.out.print(" | ");
-////        System.out.print(newGame.getHistory());
-////        System.out.print("\n");
-//
-//        // save to db new games
-//        gameServiceImpl.saveGameToDb(newGame);
-//        return "test";
-//    }
+    @PostMapping("/api/game")
+    public String receiveInfoFromApi(@RequestBody GameDto gameDto) {
 
-//    @PostMapping("/api/result")
-//    public String receiveResultApi(@RequestBody GameResultDto gameResultDto) {
-//
-//        Team teamHome = teamServiceImpl.loadTeamByName(gameResultDto.getTeamHome());
-//        System.out.println("name from dto: " + gameResultDto.getTeamHome());
-//
-//        Game currentGame = gameServiceImpl.findFirstScheduleByTeam(teamHome);
-//        System.out.println("name from db: " + currentGame.getTeamHome().getName());
-//
-//        currentGame.setActive(gameResultDto.isActive());
-//        currentGame.setHistory(gameResultDto.isHistory());
-//
-//        currentGame.setHomeGoal(gameResultDto.getHomeGoal());
-//        currentGame.setAwayGoal(gameResultDto.getAwayGoal());
-//
-//        currentGame.setHomePoint(gameResultDto.getHomePoint());
-//        currentGame.setAwayPoint(gameResultDto.getAwayPoint());
-//
-//        currentGame.setHomeYellow(gameResultDto.getHomeYellow());
-//        currentGame.setAwayYellow(gameResultDto.getAwayYellow());
-//
-//        currentGame.setHomeRed(gameResultDto.getHomeRed());
-//        currentGame.setAwayRed(gameResultDto.getAwayRed());
-//
-//        gameServiceImpl.saveGameToDb(currentGame);
-////        System.out.print("****** result");
-////        System.out.print(game.getTeamHome());
-////        System.out.print(" | ");
-////        System.out.print(game.getHomeGoal());
-////        System.out.print(" | ");
-////        System.out.print(game.getAwayGoal());
-////        System.out.print(" | ");
-////        System.out.print(game.getTeamAway());
-////        System.out.print(" | ");
-////        System.out.print(game.isActive());
-////        System.out.print(" | ");
-////        System.out.print(game.isHistory());
-////        System.out.print(" | ");
-////        System.out.println("\n");
-////        // save to db new games
-//        return "test";
-//
-//    }
+        Game newGame = new Game();
+
+        Team teamHome = teamServiceImpl.loadTeamByName(gameDto.getTeamHome());
+        Team teamAway = teamServiceImpl.loadTeamByName(gameDto.getTeamAway());
+        newGame.setTeamHome(teamHome);
+        newGame.setTeamAway(teamAway);
+
+        newGame.setActive(gameDto.isActive());
+        newGame.setHistory(gameDto.isHistory());
+        newGame.setScheduled(gameDto.getScheduled());
+        newGame.setFinished(gameDto.getFinished());
+        System.out.println("ACTIVE: " + gameDto.isActive());
+
+        Odd odd = new Odd();
+        odd.setAwayOdd(gameDto.getAwayOdd());
+        odd.setDrawOdd(gameDto.getDrawOdd());
+        odd.setHomeOdd(gameDto.getHomeOdd());
+
+        odd = statisticService.generateOdd(newGame);
+
+        oddServiceImpl.addNewOdd(odd);
+        newGame.setOdd(odd);
+
+        // save to db new games
+        gameServiceImpl.saveGameToDb(newGame);
+        return "test";
+    }
+
+    @PostMapping("/api/result")
+    public String receiveResultApi(@RequestBody GameResultDto gameResultDto) {
+
+        Team teamHome = teamServiceImpl.loadTeamByName(gameResultDto.getTeamHome());
+        System.out.println("name from dto: " + gameResultDto.getTeamHome());
+
+        Game currentGame = gameServiceImpl.findFirstScheduleByTeam(teamHome);
+        System.out.println("name from db: " + currentGame.getTeamHome().getName());
+
+        currentGame.setActive(gameResultDto.isActive());
+        currentGame.setHistory(gameResultDto.isHistory());
+        currentGame.setFinished(gameResultDto.getFinished());
+        currentGame.setScheduled(gameResultDto.getScheduled());
+        currentGame.setHomeGoal(gameResultDto.getHomeGoal());
+        currentGame.setAwayGoal(gameResultDto.getAwayGoal());
+        currentGame.setHomePoint(gameResultDto.getHomePoint());
+        currentGame.setAwayPoint(gameResultDto.getAwayPoint());
+        currentGame.setHomeYellow(gameResultDto.getHomeYellow());
+        currentGame.setAwayYellow(gameResultDto.getAwayYellow());
+        currentGame.setHomeRed(gameResultDto.getHomeRed());
+        currentGame.setAwayRed(gameResultDto.getAwayRed());
+        gameServiceImpl.saveGameToDb(currentGame);
+
+        return "test";
+
+    }
 
     @GetMapping("/games/scheduled/display")
     public String displayAllActiveGame(Model model) {
@@ -197,7 +172,7 @@ public class HomeController {
     public String displayAllResultsGame(Model model) {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         model.addAttribute("userName", userName);
-        List<Game> gamesResult = gameServiceImpl.getAllActiveGame();
+        List<Game> gamesResult = gameServiceImpl.getAllFinishedGames();
         model.addAttribute("games", gamesResult);
         return "game_results_display";
     }
