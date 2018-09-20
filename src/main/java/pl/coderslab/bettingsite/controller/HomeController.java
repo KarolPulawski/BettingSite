@@ -3,18 +3,9 @@ package pl.coderslab.bettingsite.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import pl.coderslab.bettingsite.entity.*;
-import pl.coderslab.bettingsite.model.BetStatus;
-import pl.coderslab.bettingsite.model.GameDto;
-import pl.coderslab.bettingsite.model.GameResultDto;
-import pl.coderslab.bettingsite.service.DateService;
 import pl.coderslab.bettingsite.service.StatisticService;
 import pl.coderslab.bettingsite.service.UserService;
 import pl.coderslab.bettingsite.service.impl.*;
-
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.util.*;
 
 @Controller
 @RequestMapping
@@ -50,6 +41,11 @@ public class HomeController {
     public String myModeratorPage() {
         return "my moderator page";
     }
+
+//    @RequestMapping("/home/hello")
+//    public String homeHello() {
+//        return "index";
+//    }
 
 
 
