@@ -2,9 +2,6 @@
       layout:decorator="layout_main">
 
 <div layout:fragment="content">
-
-    <p th:text= "'GAMES for user: ' + ${userName}"></p>
-
     <table>
         <thead>
             <td>game id</td>
@@ -45,9 +42,6 @@
             </td>
         </tr>
     </table>
-
-
-    <p th:text= "'TICKET for user: ' + ${userName}"></p>
 
     <form action="/ticket/create" method="post">
         <button name="playerId" type="submit">Create new ticket</button>
