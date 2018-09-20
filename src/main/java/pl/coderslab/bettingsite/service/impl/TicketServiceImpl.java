@@ -56,7 +56,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<Ticket> findAllTicketByWinTrueAndPaidFalse() {
-        return ticketRepository.findAllByWinTrue();
+        return ticketRepository.findAllByWinTrueAndPaidFalse();
     }
 
     @Scheduled(fixedDelay = 5_000L)
@@ -80,14 +80,22 @@ public class TicketServiceImpl implements TicketService {
 
     @Scheduled(fixedDelay = 10_000L)
     public void paidIfTicketIsWin() {
-        List<Ticket> ticketsToCheckPaid = findAllTicketByWinTrueAndPaidFalse();
-        for(Ticket ticket : ticketsToCheckPaid) {
-            BigDecimal amountToPaid = ticket.getExpectedWin();
-            User user = ticket.getUser();
-            Wallet currentWallet = user.getWallet();
-            walletServiceImpl.depositMoneyWin(amountToPaid, currentWallet);
-            ticket.setPaid(true);
-            addTicketToDb(ticket);
+        List<Ticket> ticketsToCheckPaid = null;
+        try {
+            ticketsToCheckPaid = findAllTicketByWinTrueAndPaidFalse();
+            for(Ticket ticket : ticketsToCheckPaid) {
+                BigDecimal amountToPaid = ticket.getExpectedWin();
+                User user = ticket.getUser();
+                Wallet currentWallet = user.getWallet();
+                walletServiceImpl.depositMoneyWin(amountToPaid, currentWallet);
+                ticket.setPaid(true);
+                addTicketToDb(ticket);
+                ticketsToCheckPaid.clear();
+            }
+        } catch (Exception e) {
+            System.out.println("TICKETS TO CHECK ARE NULL");
+
         }
+
     }
 }

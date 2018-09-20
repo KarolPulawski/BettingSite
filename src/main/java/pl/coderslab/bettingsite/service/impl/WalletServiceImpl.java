@@ -52,10 +52,6 @@ public class WalletServiceImpl implements WalletService {
         }
     }
 
-
-
-
-
     @Override
     public Wallet findByCurrentLoggedInUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
