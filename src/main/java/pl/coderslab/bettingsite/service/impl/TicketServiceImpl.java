@@ -2,14 +2,19 @@ package pl.coderslab.bettingsite.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import pl.coderslab.bettingsite.entity.*;
 import pl.coderslab.bettingsite.model.BetStatus;
 import pl.coderslab.bettingsite.repository.BetRepository;
 import pl.coderslab.bettingsite.repository.TicketRepository;
 import pl.coderslab.bettingsite.repository.WalletRepository;
 import pl.coderslab.bettingsite.service.TicketService;
+import pl.coderslab.bettingsite.service.UserService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
@@ -27,6 +32,11 @@ public class TicketServiceImpl implements TicketService {
 
     @Autowired
     private WalletRepository walletRepository;
+
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private BetServiceImpl betServiceImpl;
 
     @Override
     public void addTicketToDb(Ticket ticket) {
@@ -123,6 +133,53 @@ public class TicketServiceImpl implements TicketService {
             e.printStackTrace();
         }
         return totalOdd;
+    }
+
+    @Override
+    public boolean submitTicket(Set<Bet> bets, double stake, Model model) {
+
+        BigDecimal stakeBigDecimal = new BigDecimal(stake);
+
+
+
+        Wallet currentWallet = walletServiceImpl.findByCurrentLoggedInUser();
+        if(currentWallet.getBalance().compareTo(stakeBigDecimal) >= 0
+                && currentWallet.getBalance().compareTo(new BigDecimal(0.0)) == 1) {
+            String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+            User currentUser = userService.findUserByEmail(userName);
+
+
+            Boolean active = true;
+            Boolean paid = false;
+            Boolean win = false;
+
+            Ticket ticket = new Ticket();
+            addTicketToDb(ticket);
+            ticket.setBets(bets);
+            ticket.setUser(currentUser);
+            ticket.setActive(active);
+            ticket.setPaid(paid);
+            ticket.setWin(win);
+            ticket.setStake(stakeBigDecimal);
+            ticket.setUncheckedCounter(bets.size());
+
+            double totalOdd = 1.0;
+
+            for (Bet b : bets) {
+                b.setTicket(ticket);
+                totalOdd *= b.getOdd();
+                betServiceImpl.addBetToDb(b);
+            }
+
+            ticket.setTotalOdd(new BigDecimal(totalOdd));
+            ticket.setExpectedWin();
+            addTicketToDb(ticket);
+            model.addAttribute("ticket", ticket);
+            walletServiceImpl.withdrawMoneyForStake(stakeBigDecimal);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
