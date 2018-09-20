@@ -85,7 +85,8 @@
         <p th:text="'Total odd: ' + ${session.totalOdd}"></p>
 
         <form action="/ticket/submit" method="post">
-            <input type="number" name="stake">
+            <!--<input type="number" name="stake" step="0.01">-->
+            <input type="text" name="stake">
             <button name="playerId" type="submit">Submit ticket</button>
         </form>
 

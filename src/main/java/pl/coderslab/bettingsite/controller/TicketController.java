@@ -110,7 +110,16 @@ public class TicketController {
     public String submitTicket(HttpServletRequest request, Model model) {
         HttpSession sess = request.getSession();
         Set<Bet> bets = (Set<Bet>) sess.getAttribute("bets");
-        double stake = Double.parseDouble(request.getParameter("stake"));
+
+        double stake = 0;
+        try {
+            stake = Double.parseDouble(request.getParameter("stake"));
+            if(stake <= 0) {
+                return "warning_not_correct_stake_value";
+            }
+        } catch (NumberFormatException e) {
+            return "warning_not_correct_stake_value";
+        }
 
         Wallet currentWallet = walletServiceImpl.findByCurrentLoggedInUser();
         if(currentWallet.getBalance().compareTo(new BigDecimal(stake)) >= 0
@@ -147,9 +156,6 @@ public class TicketController {
         } else {
             return "warning_not_enough_money_stake";
         }
-
-
-
     }
 
     @RequestMapping("/displayAll")

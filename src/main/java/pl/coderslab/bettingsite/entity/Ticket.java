@@ -104,7 +104,7 @@ public class Ticket {
     }
 
     public void setStake(BigDecimal stake) {
-        this.stake = stake;
+        this.stake = stake.setScale(2, RoundingMode.HALF_DOWN);
     }
 
     public BigDecimal getTotalOdd() {
