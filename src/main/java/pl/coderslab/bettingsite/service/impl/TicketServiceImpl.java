@@ -3,10 +3,7 @@ package pl.coderslab.bettingsite.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import pl.coderslab.bettingsite.entity.Bet;
-import pl.coderslab.bettingsite.entity.Ticket;
-import pl.coderslab.bettingsite.entity.User;
-import pl.coderslab.bettingsite.entity.Wallet;
+import pl.coderslab.bettingsite.entity.*;
 import pl.coderslab.bettingsite.model.BetStatus;
 import pl.coderslab.bettingsite.repository.BetRepository;
 import pl.coderslab.bettingsite.repository.TicketRepository;
@@ -15,6 +12,7 @@ import pl.coderslab.bettingsite.service.TicketService;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class TicketServiceImpl implements TicketService {
@@ -97,6 +95,34 @@ public class TicketServiceImpl implements TicketService {
             System.out.println("TICKETS TO CHECK ARE NULL");
 
         }
-
     }
+
+
+    @Override
+    public double createTicket(Set<Bet> bets, Game game, String type) {
+        double totalOdd = 1.0;
+        double currentOdd = 0.0;
+
+        if(type.equals("1")) {
+            currentOdd = game.getOdd().getHomeOdd();
+        } else if (type.equals("X")) {
+            currentOdd = game.getOdd().getDrawOdd();
+        } else if (type.equals("2")) {
+            currentOdd = game.getOdd().getAwayOdd();
+        } else {
+            currentOdd = 1.0;
+        }
+
+        Bet bet = new Bet(game, type, currentOdd, BetStatus.ACTIVE);
+        try {
+            if(!bets.contains(bet)) {
+                bets.add(bet);
+                totalOdd *= currentOdd;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return totalOdd;
+    }
+
 }

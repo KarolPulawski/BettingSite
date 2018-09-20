@@ -55,31 +55,11 @@ public class TicketController {
     public String createBet(HttpServletRequest request, @PathVariable String game_id, @PathVariable String type){
         HttpSession sess = request.getSession();
         Set<Bet> bets = (Set<Bet>) sess.getAttribute("bets");
-        double totalOdd = (double)sess.getAttribute("totalOdd");
+        if(bets == null) {
+            bets = new HashSet<>();
+        }
         Game game = gameServiceImpl.findGameById(Integer.parseInt(game_id));
-
-        double currentOdd;
-
-        if(type.equals("1")) {
-            currentOdd = game.getOdd().getHomeOdd();
-        } else if (type.equals("X")) {
-            currentOdd = game.getOdd().getDrawOdd();
-        } else if (type.equals("2")) {
-            currentOdd = game.getOdd().getAwayOdd();
-        } else {
-            currentOdd = 1.0;
-        }
-
-        Bet bet = new Bet(game, type, currentOdd, BetStatus.ACTIVE);
-        try {
-            if(!bets.contains(bet)) {
-                bets.add(bet);
-                totalOdd *= currentOdd;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("BET IS ALREADY EXIST");
-        }
+        double totalOdd = ticketServiceImpl.createTicket(bets, game, type);
         totalOdd = Math.round(totalOdd * 100)/100.0;
         sess.setAttribute("bets", bets);
         sess.setAttribute("totalOdd", totalOdd);
@@ -87,10 +67,12 @@ public class TicketController {
     }
 
     @PostMapping("/delete/{game_id}")
-    public String deleteBetFromTicket(Model model, @PathVariable String game_id, HttpServletRequest request) {
+    public String deleteBetFromTicket(@PathVariable String game_id, HttpServletRequest request) {
         HttpSession sess = request.getSession();
+
         Set<Bet> bets = (Set<Bet>) sess.getAttribute("bets");
         double totalOdd = (double) sess.getAttribute("totalOdd");
+
         Bet betToDelete = null;
         for(Bet b : bets) {
             if(b.getGame().getId() == Integer.parseInt(game_id)) {
@@ -101,8 +83,10 @@ public class TicketController {
         totalOdd /= betToDelete.getOdd();
         totalOdd = Math.round(totalOdd * 100)/100.0;
         bets.remove(betToDelete);
+
         sess.setAttribute("bets", bets);
         sess.setAttribute("totalOdd", totalOdd);
+
         return "redirect:/games/scheduled/display";
     }
 
@@ -154,6 +138,7 @@ public class TicketController {
             ticket.setExpectedWin();
             ticketServiceImpl.addTicketToDb(ticket);
             model.addAttribute("ticket", ticket);
+            sess.setAttribute("bets", null);
             walletServiceImpl.withdrawMoneyForStake(stakeBigDecimal);
             return "ticket_display";
         } else {
