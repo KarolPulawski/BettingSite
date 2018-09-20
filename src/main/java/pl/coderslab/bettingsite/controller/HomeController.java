@@ -3,6 +3,7 @@ package pl.coderslab.bettingsite.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import pl.coderslab.bettingsite.entity.User;
 import pl.coderslab.bettingsite.service.StatisticService;
 import pl.coderslab.bettingsite.service.UserService;
 import pl.coderslab.bettingsite.service.impl.*;
@@ -37,7 +38,10 @@ public class HomeController {
     @GetMapping("/home")
     public String myHome(HttpServletRequest request) {
         HttpSession sess = request.getSession();
+        User user = userService.isLoggedIn();
+        String currentEmail = user.getEmail();
         sess.setAttribute("loggedIn", "loggedIn");
+        sess.setAttribute("currentEmail", currentEmail);
         return "redirect:/games/scheduled/display";
     }
 
