@@ -83,7 +83,8 @@ public class TicketServiceImpl implements TicketService {
         List<Ticket> ticketsToCheckPaid = findAllTicketByWinTrueAndPaidFalse();
         for(Ticket ticket : ticketsToCheckPaid) {
             BigDecimal amountToPaid = ticket.getExpectedWin();
-            Wallet currentWallet = ticket.getUser().getWallet();
+            User user = ticket.getUser();
+            Wallet currentWallet = user.getWallet();
             currentWallet.setBalance(currentWallet.getBalance().add(amountToPaid));
             ticket.setPaid(true);
             addTicketToDb(ticket);

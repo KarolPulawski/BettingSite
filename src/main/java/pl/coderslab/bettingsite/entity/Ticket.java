@@ -17,7 +17,7 @@ public class Ticket {
     @OneToMany(mappedBy = "ticket", fetch = FetchType.EAGER)
     private List<Bet> bets;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private User user;
 
     private Integer uncheckedCounter;
