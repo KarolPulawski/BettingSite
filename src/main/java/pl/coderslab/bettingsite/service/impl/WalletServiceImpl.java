@@ -33,15 +33,6 @@ public class WalletServiceImpl implements WalletService {
         return true;
     }
 
-//    @Override
-//    public boolean depositMoneyWin(BigDecimal winAmount) {
-//        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-//        User user = userService.findUserByEmail(userName);
-//        Wallet currentWallet = user.getWallet();
-//        currentWallet.setBalance(currentWallet.getBalance().add(winAmount));
-//        return true;
-//    }
-
     @Override
     public boolean withdrawMoney(BigDecimal withdrawAmount) {
         Wallet currentWallet = findByCurrentLoggedInUser();
@@ -56,8 +47,8 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public Wallet findByCurrentLoggedInUser() {
-        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        return walletRepository.findByUser(userService.findUserByEmail(userName));
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return walletRepository.findByUser(userService.findUserByEmail(email));
 
     }
 }

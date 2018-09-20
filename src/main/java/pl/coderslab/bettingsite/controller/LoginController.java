@@ -8,7 +8,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import pl.coderslab.bettingsite.entity.Role;
 import pl.coderslab.bettingsite.entity.User;
 import pl.coderslab.bettingsite.service.UserService;
 

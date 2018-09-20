@@ -51,8 +51,8 @@ public class UserService {
     }
 
     public User isLoggedIn() {
-        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findByEmail(userName);
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByEmail(email);
     }
 
 }
