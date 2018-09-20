@@ -88,6 +88,7 @@ public class TicketServiceImpl implements TicketService {
             currentWallet.setBalance(currentWallet.getBalance().add(amountToPaid));
             ticket.setPaid(true);
             addTicketToDb(ticket);
+            walletServiceImpl.saveNewWalletToDb(currentWallet);
         }
     }
 }
