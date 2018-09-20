@@ -98,10 +98,8 @@ public class StatisticService {
             awayOdd = 2.5;
         } else if (difference > 0) {
             homeOdd = Math.exp(1-difference);
-//            awayOdd = Math.exp(1+difference);
             awayOdd = Math.pow(3,1+difference);
         } else if (difference < 0) {
-//            homeOdd = Math.exp(1+difference);
             homeOdd = Math.pow(3,1+difference);
             awayOdd = Math.exp(1-difference);
         }
