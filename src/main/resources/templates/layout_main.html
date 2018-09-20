@@ -44,16 +44,16 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fa fa-bars"></i>
             </button>
-            <a class="navbar-brand" href=""><img src="static/images/logo.png" alt="Logo"></a>
-            <a class="navbar-brand hidden" href=""><img src="static/images/logo2.png" alt="Logo"></a>
+            <a class="navbar-brand" href=""><img src="static/images/logo.png" alt="Home"></a>
+            <!--<a class="navbar-brand hidden" href=""><img src="static/images/logo2.png" alt="Logo"></a>-->
         </div>
 
         <div id="main-menu" class="main-menu collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active">
-                    <a th:href="@{/games/scheduled/display}"> <i class="menu-icon fa fa-dashboard"></i>HOME</a>
+                <!--<li class="active">-->
+                    <!--<a th:href="@{/games/scheduled/display}"> <i class="menu-icon fa fa-dashboard"></i>HOME</a>-->
 
-                </li>
+                <!--</li>-->
                 <h3 class="menu-title">Tickets</h3><!-- /.menu-title -->
 
                 <li>
@@ -719,7 +719,7 @@
 
     <!--kkkkkkkkkkkkkkkkkkkkkkkkk-->
 
-    <div class="content mt-3">
+    <!--<div class="content mt-3">-->
 
         <!--<div class="col-sm-12">-->
             <!--<div class="alert  alert-success alert-dismissible fade show" role="alert">-->
@@ -1098,7 +1098,7 @@
             <!--&lt;!&ndash; /# card &ndash;&gt;-->
         <!--</div>-->
 
-    </div> <!-- .content -->
+    <!--</div> &lt;!&ndash; .content &ndash;&gt;-->
 
     <!--<p th:text= "'LOGGED IN?: ' + ${session.loggedIn}"></p>-->
     <!--<p th:text= "${session.loggedIn}"></p>-->
@@ -1108,9 +1108,15 @@
         <!--Text visible only to authenticated users.-->
     <!--</div>-->
 
-    <div layout:fragment="content">
-        <!--Content layout-->
-    </div>
+
+
+    <!--<div id='parent_div_1'>-->
+        <div layout:fragment="content">
+            <!--Content layout-->
+        </div>
+    <!--</div>-->
+
+
 
     <!--kkkkkkkkkkkkkkkkkkkkkkkkk-->
 

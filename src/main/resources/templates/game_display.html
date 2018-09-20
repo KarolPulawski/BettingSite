@@ -2,98 +2,124 @@
       layout:decorator="layout_main">
 
 <div layout:fragment="content">
-    <table>
-        <thead>
-            <td>game id</td>
+
+    <!--<div id='parent_div_1'>-->
+    <div class="col-lg-8 classcol-md-12">
+
+        <!--<div class ='child_div_1'>asd</div>-->
+        <!--<div class ='child_div_2'>asd</div>-->
+        <table>
+            <thead>
+                <td>game id</td>
+                <td>home</td>
+                <td>away</td>
+                <!--<td>starts at</td>-->
+                <!--<td>1</td>-->
+                <!--<td>X</td>-->
+                <!--<td>2</td>-->
+                <td>bet 1</td>
+                <td>bet X</td>
+                <td>bet 2</td>
+            </thead>
+
+            <tr th:each="game: ${games}">
+                <td th:text="${game.id}"></td>
+                <td th:text="${game.teamHome.name}"></td>
+                <td th:text="${game.teamAway.name}"></td>
+                <!--<td th:text="${game.started}"></td>-->
+                <!--<td th:text="${game.odd.homeOdd}"></td>-->
+                <!--<td th:text="${game.odd.drawOdd}"></td>-->
+                <!--<td th:text="${game.odd.awayOdd}"></td>-->
+
+                <td>
+                    <form th:action="@{/ticket/{game_id}/1/create(game_id = ${game.id})}" method="get">
+                        <button name="playerId" th:text="${game.odd.homeOdd}" type="submit"></button>
+                    </form>
+                </td>
+                <td>
+                    <form th:action="@{/ticket/{game_id}/X/create(game_id = ${game.id})}" method="get">
+                        <button name="playerId" th:text="${game.odd.drawOdd}" type="submit"></button>
+                    </form>
+                </td>
+                <td>
+                    <form th:action="@{/ticket/{game_id}/2/create(game_id = ${game.id})}" method="get">
+                        <button name="playerId" th:text="${game.odd.awayOdd}" type="submit"></button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="col-lg-4 classcol-md-12">
+        <!--<div class ='child_div_1'>asd</div>-->
+        <!--<div class ='child_div_2'>asd</div>-->
+
+        <form action="/ticket/create" method="post">
+            <button name="playerId" type="submit">Create new ticket</button>
+        </form>
+
+        <table>
+            <thead>
+            <!--<td>bet id</td>-->
             <td>home</td>
             <td>away</td>
-            <td>starts at</td>
-            <td>1</td>
-            <td>X</td>
-            <td>2</td>
-            <td>bet 1</td>
-            <td>bet X</td>
-            <td>bet 2</td>
-        </thead>
+            <td>type</td>
+            <td>odd</td>
+            <td>delete</td>
 
-        <tr th:each="game: ${games}">
-            <td th:text="${game.id}"></td>
-            <td th:text="${game.teamHome.name}"></td>
-            <td th:text="${game.teamAway.name}"></td>
-            <td th:text="${game.started}"></td>
-            <td th:text="${game.odd.homeOdd}"></td>
-            <td th:text="${game.odd.drawOdd}"></td>
-            <td th:text="${game.odd.awayOdd}"></td>
+            </thead>
 
-            <td>
-                <form th:action="@{/ticket/{game_id}/1/create(game_id = ${game.id})}" method="get">
-                    <button name="playerId" th:text="${game.odd.homeOdd}" type="submit"></button>
-                </form>
-            </td>
-            <td>
-                <form th:action="@{/ticket/{game_id}/X/create(game_id = ${game.id})}" method="get">
-                    <button name="playerId" th:text="${game.odd.drawOdd}" type="submit"></button>
-                </form>
-            </td>
-            <td>
-                <form th:action="@{/ticket/{game_id}/2/create(game_id = ${game.id})}" method="get">
-                    <button name="playerId" th:text="${game.odd.awayOdd}" type="submit"></button>
-                </form>
-            </td>
-        </tr>
-    </table>
+            <tr th:each="bet: ${session.bets}">
+                <!--<td th:text="${bet.id}"></td>-->
+                <td th:text="${bet.game.teamHome.name}"></td>
+                <td th:text="${bet.game.teamAway.name}"></td>
+                <td th:text="${bet.type}"></td>
+                <td th:text="${bet.odd}"></td>
+                <td>
+                    <form th:action="@{/ticket/delete/} + ${bet.game.id}" method="post">
+                        <button name="playerId" type="submit">X</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
 
-    <form action="/ticket/create" method="post">
-        <button name="playerId" type="submit">Create new ticket</button>
-    </form>
 
-    <table>
-        <thead>
-        <td>bet id</td>
-        <td>home team</td>
-        <td>away team</td>
-        <td>type</td>
-        <td>odd</td>
-        <td>delete from ticket</td>
+        <div th:if="${#lists.isEmpty(session.bets)}">
+            <p th:text="'Choose your bets'"></p>
 
-        </thead>
+        </div>
 
-        <tr th:each="bet: ${session.bets}">
-            <td th:text="${bet.id}"></td>
-            <td th:text="${bet.game.teamHome.name}"></td>
-            <td th:text="${bet.game.teamAway.name}"></td>
-            <td th:text="${bet.type}"></td>
-            <td th:text="${bet.odd}"></td>
-            <td>
-                <form th:action="@{/ticket/delete/} + ${bet.game.id}" method="post">
-                    <button name="playerId" type="submit">X</button>
-                </form>
-            </td>
-        </tr>
-    </table>
+
+        <div th:if="${not #lists.isEmpty(session.bets)}">
+            <p th:text="'Total odd: ' + ${session.totalOdd}"></p>
+
+            <form action="/ticket/submit" method="post">
+                <!--<input type="number" name="stake" step="0.01">-->
+                <input type="text" name="stake"/>
+                <button name="playerId" type="submit">Submit ticket</button>
+            </form>
+
+        </div>
+
+
+        <!--<form action="/ticket/submit" method="post">-->
+        <!--<input type="number" name="stake">-->
+        <!--<button name="playerId" type="submit">Submit ticket</button>-->
+        <!--</form>-->
 
 
 
-    <div th:if="${not #lists.isEmpty(session.bets)}">
-        <p th:text="'Total odd: ' + ${session.totalOdd}"></p>
-
-        <form action="/ticket/submit" method="post">
-            <!--<input type="number" name="stake" step="0.01">-->
-            <input type="text" name="stake"/>
-            <button name="playerId" type="submit">Submit ticket</button>
-        </form>
 
     </div>
 
+    <!--<div id='parent_div_3'>-->
+        <!--<a th:href="@{/ticket/displayAll}">DISPLAY ALL TICKETS</a>-->
+    <!--</div>-->
 
-    <!--<form action="/ticket/submit" method="post">-->
-        <!--<input type="number" name="stake">-->
-        <!--<button name="playerId" type="submit">Submit ticket</button>-->
-    <!--</form>-->
 
-    <a th:href="@{/ticket/displayAll}">DISPLAY ALL TICKETS</a>
-    </br>
-    <a th:href="@{/wallet/panel}">WALLET PANEL</a>
+
+
+
 
 </div>
 </html>
