@@ -12,6 +12,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/home").setViewName("home");
+        registry.addViewController("/403").setViewName("/warning_403");
     }
 
     @Bean
