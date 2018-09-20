@@ -30,6 +30,9 @@ public class GamesController {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         model.addAttribute("userName", userName);
         List<Game> gamesScheduled = gameServiceImpl.getAllScheduledGames();
+        Team team = teamServiceImpl.loadTeamByName("Chelsea");
+        Game hotGame = gameServiceImpl.findGameById(team.getId());
+        model.addAttribute("hotGame", hotGame);
         model.addAttribute("games", gamesScheduled);
         return "game_display";
     }

@@ -28,10 +28,8 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
     @Query("SELECT g FROM Game g WHERE team_away_id = ?1 AND g.history = TRUE ORDER BY started DESC")
     List<Game> findTotalPointsLastThreeMatchesAway(int teamId);
 
-    Game findByActiveFalseAndTeamHome(Team teamHome);
-
-    Game findFirstByTeamHome(Team teamHome);
-
     Game findFirstByTeamHomeAndStarted(Team teamHome, Timestamp started);
 
+    @Query("SELECT g FROM Game g WHERE g.scheduled = true and g.active = false and g.finished = false and g.teamHome.id = ?1 or g.teamAway.id = ?1")
+    Game findHotGame(int id);
 }

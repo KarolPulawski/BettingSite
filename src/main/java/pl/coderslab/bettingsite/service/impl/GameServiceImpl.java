@@ -67,21 +67,16 @@ public class GameServiceImpl implements GameService {
         return gameRepository.findTotalPointsLastThreeMatchesAway(teamId);
     }
 
-    @Override
-    public Game findActiveGameByTeam(Team team) {
-        return gameRepository.findByActiveFalseAndTeamHome(team);
-    }
 
     @Override
-    public Game findFirstByTeamHome(Team teamHome) {
-        return gameRepository.findFirstByTeamHome(teamHome);
+    public Game findByScheduledTrueAndFinishedFalseAndActiveFalseAndTeamHome(int teamHomeId) {
+        return gameRepository.findHotGame(teamHomeId);
     }
 
     @Override
     public Game findGameByTeamHomeAndStarted(Team teamHome, Timestamp started) {
         return gameRepository.findFirstByTeamHomeAndStarted(teamHome, started);
     }
-
 
     @Override
     public Game findGameById(int id) {

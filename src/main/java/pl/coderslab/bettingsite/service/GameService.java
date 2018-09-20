@@ -21,9 +21,7 @@ public interface GameService {
     List<Game> totalPointsLastThreeHomeMatches(int teamId);
     List<Game> totalPointsLastThreeAwayMatches(int teamId);
 
-    Game findActiveGameByTeam(Team team);
-
-    Game findFirstByTeamHome(Team teamHome);
+    Game findByScheduledTrueAndFinishedFalseAndActiveFalseAndTeamHome(int teamHomeId);
 
     Game findGameByTeamHomeAndStarted(Team teamHome, Timestamp started);
 

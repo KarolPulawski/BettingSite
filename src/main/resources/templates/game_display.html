@@ -3,26 +3,59 @@
 
 <div layout:fragment="content">
 
-    <!--<div>-->
-        <!--<p th:text="'UPCOMING HOT EVENTS'"></p>-->
-        <!---->
-        <!---->
-        <!---->
-    <!--</div>-->
+    <div>
+        <h3 th:text="'UPCOMING HOT EVENTS'"></h3>
+
+
+        <table>
+            <thead>
+            <td>game id</td>
+            <td>home</td>
+            <td>away</td>
+            <td>bet 1</td>
+            <td>bet X</td>
+            <td>bet 2</td>
+            </thead>
+
+            <tr>
+                <td th:text="${hotGame.id}"></td>
+                <td th:text="${hotGame.teamHome.name}"></td>
+                <td th:text="${hotGame.teamAway.name}"></td>
+
+                <td>
+                    <form th:action="@{/ticket/{game_id}/1/create(game_id = ${hotGame.id})}" method="get">
+                        <button name="playerId" th:text="${hotGame.odd.homeOdd}" type="submit"></button>
+                    </form>
+                </td>
+                <td>
+                    <form th:action="@{/ticket/{game_id}/X/create(game_id = ${hotGame.id})}" method="get">
+                        <button name="playerId" th:text="${hotGame.odd.drawOdd}" type="submit"></button>
+                    </form>
+                </td>
+                <td>
+                    <form th:action="@{/ticket/{game_id}/2/create(game_id = ${hotGame.id})}" method="get">
+                        <button name="playerId" th:text="${hotGame.odd.awayOdd}" type="submit"></button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+
+    </div>
 
 
 
     <!--<div id='parent_div_1'>-->
     <div class="col-lg-8 classcol-md-12">
 
-        <!--<div class ='child_div_1'>asd</div>-->
-        <!--<div class ='child_div_2'>asd</div>-->
+        <div>
+            <h5 th:text="'NEXT EVENTS'"></h5>
+        </div>
         <table>
             <thead>
                 <td>game id</td>
                 <td>home</td>
                 <td>away</td>
-                <!--<td>starts at</td>-->
+                <td>starts at</td>
                 <!--<td>1</td>-->
                 <!--<td>X</td>-->
                 <!--<td>2</td>-->
@@ -35,7 +68,7 @@
                 <td th:text="${game.id}"></td>
                 <td th:text="${game.teamHome.name}"></td>
                 <td th:text="${game.teamAway.name}"></td>
-                <!--<td th:text="${game.started}"></td>-->
+                <td th:text="${#dates.format(game.started,'dd/MM HH:MM:ss')}"></td>
                 <!--<td th:text="${game.odd.homeOdd}"></td>-->
                 <!--<td th:text="${game.odd.drawOdd}"></td>-->
                 <!--<td th:text="${game.odd.awayOdd}"></td>-->
