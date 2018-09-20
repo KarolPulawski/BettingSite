@@ -149,6 +149,7 @@ public class TicketController {
                 totalOdd *= b.getOdd();
                 betServiceImpl.addBetToDb(b);
             }
+
             ticket.setTotalOdd(new BigDecimal(totalOdd));
             ticket.setExpectedWin();
             ticketServiceImpl.addTicketToDb(ticket);

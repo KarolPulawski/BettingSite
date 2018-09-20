@@ -62,18 +62,19 @@ public class TicketServiceImpl implements TicketService {
     @Scheduled(fixedDelay = 5_000L)
     public void checkIfTicketIsWin() {
         List<Ticket> ticketsToCheck = findAllTicketByUncheckedCounterZero();
-        int counterWin = 0;
+
         for(Ticket ticket : ticketsToCheck) {
+            boolean isWin = true;
             List<Bet> bets = betRepository.findAllByTicketId(ticket.getId());
             for (Bet b : bets) {
-                if(b.getBetStatus() == BetStatus.WIN) {
-                    counterWin++;
+                if(b.getBetStatus() == BetStatus.LOSE) {
+                    isWin = false;
+                    break;
                 }
             }
             ticket.setActive(false);
-            if(counterWin == bets.size()) {
-                ticket.setWin(true);
-            }
+            if(isWin) ticket.setWin(true);
+            else ticket.setWin(false);
             addTicketToDb(ticket);
         }
     }
