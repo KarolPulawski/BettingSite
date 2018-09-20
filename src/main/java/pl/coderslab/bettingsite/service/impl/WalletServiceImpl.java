@@ -61,6 +61,6 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public boolean withdrawMoneyForStake(BigDecimal stakeAmount) {
-        return false;
+        return withdrawMoney(stakeAmount);
     }
 }
