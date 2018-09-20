@@ -11,6 +11,8 @@ import org.springframework.web.servlet.ModelAndView;
 import pl.coderslab.bettingsite.entity.User;
 import pl.coderslab.bettingsite.service.UserService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -19,14 +21,25 @@ public class LoginController {
     private UserService userService;
 
     @RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
-    public ModelAndView login(){
+    public ModelAndView login(HttpServletRequest request){
         ModelAndView modelAndView = new ModelAndView();
+        HttpSession sess = request.getSession();
 
         if(userService.isLoggedIn() != null) {
             modelAndView.setViewName("redirect:/games/scheduled/display");
+
         } else {
             modelAndView.setViewName("login");
         }
+        return modelAndView;
+    }
+
+    @RequestMapping(value={"/logout"}, method = RequestMethod.GET)
+    public ModelAndView logout(HttpServletRequest request){
+        ModelAndView modelAndView = new ModelAndView();
+        HttpSession sess = request.getSession();
+        sess.setAttribute("loggedIn", null);
+        modelAndView.setViewName("redirect:/games/scheduled/display");
         return modelAndView;
     }
 

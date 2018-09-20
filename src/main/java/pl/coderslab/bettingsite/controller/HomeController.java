@@ -7,8 +7,10 @@ import pl.coderslab.bettingsite.service.StatisticService;
 import pl.coderslab.bettingsite.service.UserService;
 import pl.coderslab.bettingsite.service.impl.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 @Controller
-@RequestMapping
 public class HomeController {
 
     @Autowired
@@ -32,9 +34,11 @@ public class HomeController {
     @Autowired
     private BetServiceImpl betServiceImpl;
 
-    @RequestMapping("/home")
-    public String myHome() {
-        return "game_display";
+    @GetMapping("/home")
+    public String myHome(HttpServletRequest request) {
+        HttpSession sess = request.getSession();
+        sess.setAttribute("loggedIn", "loggedIn");
+        return "redirect:/games/scheduled/display";
     }
 
     @RequestMapping("/moderator/mypage")

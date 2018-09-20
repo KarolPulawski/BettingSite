@@ -1064,7 +1064,8 @@
 
     </div> <!-- .content -->
 
-
+    <p th:text= "'LOGGED IN?: ' + ${session.loggedIn}"></p>
+    <p th:text= "${session.loggedIn}"></p>
     <div sec:authorize="hasRole('USER')">Text visible to user.</div>
     <div sec:authorize="hasRole('ADMIN')">Text visible to admin.</div>
     <div sec:authorize="isAuthenticated()">
@@ -1072,6 +1073,7 @@
     </div>
 
     <div layout:fragment="content">
+
         Content layout
     </div>
 
