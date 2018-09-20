@@ -34,6 +34,13 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
+    public boolean depositMoneyWin(BigDecimal winAmount, Wallet wallet) {
+        wallet.setBalance(wallet.getBalance().add(winAmount));
+        saveNewWalletToDb(wallet);
+        return true;
+    }
+
+    @Override
     public boolean withdrawMoney(BigDecimal withdrawAmount) {
         Wallet currentWallet = findByCurrentLoggedInUser();
         if(currentWallet.getBalance().compareTo(withdrawAmount) >= 0) {
@@ -45,10 +52,19 @@ public class WalletServiceImpl implements WalletService {
         }
     }
 
+
+
+
+
     @Override
     public Wallet findByCurrentLoggedInUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return walletRepository.findByUser(userService.findUserByEmail(email));
 
+    }
+
+    @Override
+    public boolean withdrawMoneyForStake(BigDecimal stakeAmount) {
+        return false;
     }
 }

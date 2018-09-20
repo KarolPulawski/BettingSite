@@ -85,10 +85,9 @@ public class TicketServiceImpl implements TicketService {
             BigDecimal amountToPaid = ticket.getExpectedWin();
             User user = ticket.getUser();
             Wallet currentWallet = user.getWallet();
-            currentWallet.setBalance(currentWallet.getBalance().add(amountToPaid));
+            walletServiceImpl.depositMoneyWin(amountToPaid, currentWallet);
             ticket.setPaid(true);
             addTicketToDb(ticket);
-            walletServiceImpl.saveNewWalletToDb(currentWallet);
         }
     }
 }
