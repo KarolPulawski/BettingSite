@@ -30,6 +30,8 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
 
     Game findFirstByTeamHomeAndStarted(Team teamHome, Timestamp started);
 
-    @Query("SELECT g FROM Game g WHERE g.scheduled = true and g.active = false and g.finished = false and g.teamHome.id = ?1 or g.teamAway.id = ?1")
+    @Query("SELECT g FROM Game g WHERE g.scheduled = true and g.active = false and g.finished = false and (g.teamHome.id = ?1 or g.teamAway.id = ?1)")
     Game findHotGame(int id);
+
+
 }

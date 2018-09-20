@@ -50,11 +50,4 @@ public class HomeController {
         return "my moderator page";
     }
 
-//    @RequestMapping("/home/hello")
-//    public String homeHello() {
-//        return "index";
-//    }
-
-
-
 }

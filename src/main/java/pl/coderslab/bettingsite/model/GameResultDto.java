@@ -35,6 +35,28 @@ public class GameResultDto extends GameDto {
     @JsonProperty("awayPoint")
     private int awayPoint;
 
+    @JsonProperty("homeCorner")
+    private int homeCorner;
+
+    @JsonProperty("awayCorner")
+    private int awayCorner;
+
+    public int getHomeCorner() {
+        return homeCorner;
+    }
+
+    public void setHomeCorner(int homeCorner) {
+        this.homeCorner = homeCorner;
+    }
+
+    public int getAwayCorner() {
+        return awayCorner;
+    }
+
+    public void setAwayCorner(int awayCorner) {
+        this.awayCorner = awayCorner;
+    }
+
     public int getHomeGoal() {
         return homeGoal;
     }

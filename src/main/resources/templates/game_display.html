@@ -6,7 +6,6 @@
     <div>
         <h3 th:text="'UPCOMING HOT EVENTS'"></h3>
 
-
         <table>
             <thead>
             <td>game id</td>
@@ -39,7 +38,6 @@
                 </td>
             </tr>
         </table>
-
     </div>
 
 
@@ -56,9 +54,6 @@
                 <td>home</td>
                 <td>away</td>
                 <td>starts at</td>
-                <!--<td>1</td>-->
-                <!--<td>X</td>-->
-                <!--<td>2</td>-->
                 <td>bet 1</td>
                 <td>bet X</td>
                 <td>bet 2</td>
@@ -69,9 +64,6 @@
                 <td th:text="${game.teamHome.name}"></td>
                 <td th:text="${game.teamAway.name}"></td>
                 <td th:text="${#dates.format(game.started,'dd/MM HH:MM:ss')}"></td>
-                <!--<td th:text="${game.odd.homeOdd}"></td>-->
-                <!--<td th:text="${game.odd.drawOdd}"></td>-->
-                <!--<td th:text="${game.odd.awayOdd}"></td>-->
 
                 <td>
                     <form th:action="@{/ticket/{game_id}/1/create(game_id = ${game.id})}" method="get">

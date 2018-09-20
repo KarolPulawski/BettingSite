@@ -12,6 +12,12 @@
             <td>away</td>
             <td>yellow home</td>
             <td>yellow away</td>
+            <td>red home</td>
+            <td>red away</td>
+            <td>penalties home</td>
+            <td>penalties away</td>
+            <td>corner home</td>
+            <td>corner away</td>
         </thead>
 
         <tr th:each="game: ${games}">
@@ -22,6 +28,12 @@
             <td th:text="${game.teamAway.name}"></td>
             <td th:text="${game.homeYellow}"></td>
             <td th:text="${game.awayYellow}"></td>
+            <td th:text="${game.homeRed}"></td>
+            <td th:text="${game.awayRed}"></td>
+            <td th:text="${game.homePenalty}"></td>
+            <td th:text="${game.awayPenalty}"></td>
+            <td th:text="${game.homeCorner}"></td>
+            <td th:text="${game.awayCorner}"></td>
         </tr>
     </table>
 </div>

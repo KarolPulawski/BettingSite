@@ -31,9 +31,9 @@ public class GamesController {
         model.addAttribute("userName", userName);
         List<Game> gamesScheduled = gameServiceImpl.getAllScheduledGames();
         Team team = teamServiceImpl.loadTeamByName("Chelsea");
-        Game hotGame = gameServiceImpl.findGameById(team.getId());
-        model.addAttribute("hotGame", hotGame);
+        Game hotGame = gameServiceImpl.findByScheduledTrueAndFinishedFalseAndActiveFalseAndTeamHome(team.getId());
         model.addAttribute("games", gamesScheduled);
+        model.addAttribute("hotGame", hotGame);
         return "game_display";
     }
 

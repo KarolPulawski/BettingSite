@@ -51,7 +51,6 @@ public class GameServiceImpl implements GameService {
         return gameRepository.findAllByFinishedTrueAndActiveFalse();
     }
 
-
     @Override
     public List<Game> totalPointsLastFiveMatches(int teamId) {
         return gameRepository.findTotalPointsLastFiveMatches(teamId);
@@ -72,6 +71,7 @@ public class GameServiceImpl implements GameService {
     public Game findByScheduledTrueAndFinishedFalseAndActiveFalseAndTeamHome(int teamHomeId) {
         return gameRepository.findHotGame(teamHomeId);
     }
+
 
     @Override
     public Game findGameByTeamHomeAndStarted(Team teamHome, Timestamp started) {
@@ -118,6 +118,10 @@ public class GameServiceImpl implements GameService {
         currentGame.setAwayYellow(gameResultDto.getAwayYellow());
         currentGame.setHomeRed(gameResultDto.getHomeRed());
         currentGame.setAwayRed(gameResultDto.getAwayRed());
+        currentGame.setHomePenalty(gameResultDto.getHomePenalty());
+        currentGame.setAwayPenalty(gameResultDto.getAwayPenalty());
+        currentGame.setHomeCorner(gameResultDto.getHomeCorner());
+        currentGame.setAwayCorner(gameResultDto.getAwayCorner());
         gameServiceImpl.saveGameToDb(currentGame);
     }
 
